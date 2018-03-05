@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main_action_navigation_addToCart"
+        android:icon="@drawable/cart_outline"
+        android:title="Add To Cart" />
+
+
+
+    <item
+        android:id="@+id/main_action_navigation_reset"
+        android:icon="@drawable/ic_delete_24dp"
+        android:title="@string/title_reset" />
+
+</menu>

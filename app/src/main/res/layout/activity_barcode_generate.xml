@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="khengat.sagar.scanqrc.activities.generator.BarcodeGenerateActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_weight="0.00"
+            android:text=""
+            android:textColor="@color/zxing_status_text"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="13dp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.00">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutProductName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputEditTextProductName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Product Name"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@android:color/background_dark" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutProductBrand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputEditTextProductBrand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Product Brand"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@android:color/background_dark" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutProductDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputEditTextProductDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ennter Product Description"
+                        android:inputType="text"
+                        android:maxLines="2"
+                        android:textColor="@android:color/background_dark" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutProductPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputEditTextProductPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ennter Product Price in Rs."
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@android:color/background_dark" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutProductSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputEditTextProductSize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Product Weight"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:textColor="@android:color/background_dark" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutProductUnit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputEditTextProductUnit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Product Unit (gm or kg etc.)"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@android:color/background_dark" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutProductStore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/textInputEditTextProductStore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@android:color/background_dark" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.00" />
+
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="358dp"
+                    android:layout_weight="0.91" />
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="55dp"
+        android:layout_height="51dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@+id/linearLayout"
+        app:layout_anchorGravity="top|right"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabShare"
+        android:layout_width="55dp"
+        android:layout_height="51dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@+id/linearLayout"
+        app:layout_anchorGravity="top|right"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_menu_share" />
+
+</android.support.design.widget.CoordinatorLayout>

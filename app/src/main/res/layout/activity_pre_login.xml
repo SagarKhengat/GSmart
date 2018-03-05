@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="sagar.khengat.gsmart.PreLoginActivity">
+    <ImageView
+        android:layout_centerInParent="true"
+        android:layout_width="130dp"
+        android:layout_gravity="center"
+        android:layout_height="130dp"
+        android:src="@drawable/gsmart"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewLinkRegister"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Login as"
+        android:textColor="@color/cardview_dark_background"
+        android:textSize="22dp" />
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:gravity="center" >
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/appCompatButtonLoginRetailer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:background="@drawable/shape"
+            android:text="Retailer" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/appCompatButtonLoginCustomer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:background="@drawable/shape"
+            android:text="Customer" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+
+</android.support.v7.widget.LinearLayoutCompat>

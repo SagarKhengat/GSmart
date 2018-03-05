@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="40dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="sagar.khengat.gsmart.activities.MainActivityForRetailer">
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewLinkWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="25dp"
+        android:gravity="center"
+        android:text=""
+        android:textSize="16dp" />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/appCompatButtonAddProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTextHint"
+        android:text="Add Product"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp" />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/appCompatButtonViewProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTextHint"
+        android:text="View Product"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp" />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/appCompatButtonUpdateProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTextHint"
+        android:text="Update Product"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp" />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/appCompatButtonDeleteProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTextHint"
+        android:text="Delete Product"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp" />
+</LinearLayout>
