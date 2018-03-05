@@ -18,7 +18,7 @@ public class Config {
     public static final String RETAILER = "retailer";
     public static final String LOGGEDIN_SHARED_PREF = "loggedin";
     public static final String STORE_SHARED_PREF = "store";
-    public static final String USERTOKEN = "id";
+    public static final String USER = "user";
     public static final String NAME = "name";
 
 }

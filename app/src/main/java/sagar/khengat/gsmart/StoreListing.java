@@ -138,7 +138,7 @@ public class StoreListing extends AppCompatActivity {
                         editor.putString(Config.WHO, "");
 
                         //putting blank value to usertoken
-                        editor.putInt(Config.USERTOKEN,0);
+
 
                         //Saving the sharedpreferences
                         editor.commit();

@@ -1,14 +1,22 @@
 package sagar.khengat.gsmart.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+
+import sagar.khengat.gsmart.Constants.Config;
 import sagar.khengat.gsmart.R;
+import sagar.khengat.gsmart.model.Retailer;
 
 /**
  * Created by Sagar Khengat on 04/03/2018.
@@ -21,7 +29,10 @@ public class FragmentRetailerMainActivity extends Fragment implements View.OnCli
     private AppCompatButton appCompatButtonDeleteProduct;
     private AppCompatTextView textViewLinkWelcome ;
     View view;
-
+    public static FragmentManager manager;
+    public static FragmentTransaction ft;
+    Gson gson;
+    Retailer retailer;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +48,12 @@ public class FragmentRetailerMainActivity extends Fragment implements View.OnCli
         appCompatButtonDeleteProduct = (AppCompatButton) view.findViewById(R.id.appCompatButtonDeleteProduct);
         appCompatButtonUpdateProduct = (AppCompatButton) view.findViewById(R.id.appCompatButtonUpdateProduct);
         textViewLinkWelcome = (AppCompatTextView)view.findViewById(R.id.textViewLinkWelcome);
+        gson = new Gson();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString(Config.USER, "");
+        retailer = gson.fromJson(json,Retailer.class);
 
+        textViewLinkWelcome.setText("Welcome  "+retailer.getName());
 
         appCompatButtonAddProduct.setOnClickListener(this);
         appCompatButtonViewProduct.setOnClickListener(this);
@@ -50,7 +66,7 @@ public class FragmentRetailerMainActivity extends Fragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.appCompatButtonAddProduct:
-
+                setUpFragment(new FragmentAddProduct());
                 break;
             case R.id.appCompatButtonViewProduct:
 
@@ -62,5 +78,17 @@ public class FragmentRetailerMainActivity extends Fragment implements View.OnCli
 
                 break;
         }
+    }
+
+
+    private void setUpFragment(Fragment fragment ) {
+        Bundle bundle = new Bundle();
+
+        manager = getActivity().getSupportFragmentManager();
+        ft = manager.beginTransaction();
+        ft.replace(android.R.id.tabcontent, fragment);
+        fragment.setArguments(bundle);
+        ft.commit();
+
     }
 }

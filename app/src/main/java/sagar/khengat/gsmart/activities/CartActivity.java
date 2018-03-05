@@ -125,12 +125,12 @@ public class CartActivity extends AppCompatActivity {
 
         } else {
             for (Cart cart : productList) {
-                double d = cart.getProductTotalPrice();
+//                double d = cart.getProductTotalPrice();
                 quantity = cart.getProductQuantity();
-                double psp = quantity * d;
+//                double psp = quantity * d;
 
-                double multiQ = quantity * d;
-                alTotalAmount.add(multiQ);
+//                double multiQ = quantity * d;
+//                alTotalAmount.add(multiQ);
 
             }
 
@@ -221,7 +221,7 @@ public class CartActivity extends AppCompatActivity {
                             history.setProductName(product.getProductName());
                             history.setProductDescription(product.getProductDescription());
                             history.setProductQuantity(product.getProductQuantity());
-                            history.setProductTotalPrice(product.getProductTotalPrice());
+//                            history.setProductTotalPrice(product.getProductTotalPrice());
 
                             mDatabaeHelper.addProductHistory(history);
                         }

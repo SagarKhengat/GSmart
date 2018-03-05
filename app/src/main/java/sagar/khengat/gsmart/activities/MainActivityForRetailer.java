@@ -82,6 +82,7 @@ public class MainActivityForRetailer extends AppCompatActivity {
 
                         //Putting blank value to email
                         editor.putString(Config.WHO, "");
+                        editor.putString(Config.USER, "");
 
                         //putting blank value to usertoken
                         editor.putString(Config.NAME,"");

@@ -197,7 +197,7 @@ public class BarcodeGenerateActivity extends AppCompatActivity implements Adapte
                 }
                 else
                 {
-                    product.setProductTotalPrice(Double.parseDouble(textInputEditTextProductPrice.getText().toString().trim()));
+//                    product.setProductTotalPrice(Double.parseDouble(textInputEditTextProductPrice.getText().toString().trim()));
                 }
 
                 if(!inputValidation.isInputEditTextFilled(textInputEditTextProductUnit, textInputLayoutProductUnit, "Enter Product Unit"))

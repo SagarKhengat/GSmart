@@ -39,19 +39,30 @@ public class Product implements Parcelable{
     @DatabaseField(canBeNull = true)
 
 
-    private double productTotalPrice;
+    private double productOriginalPrice;
+    @DatabaseField(canBeNull = true)
+
+
+    private double productGstPrice;
     @DatabaseField(canBeNull = true)
 
     private int productQuantity;
 
 
-
-    public double getProductTotalPrice() {
-        return productTotalPrice;
+    public double getProductGstPrice() {
+        return productGstPrice;
     }
 
-    public void setProductTotalPrice(double productToatalPrice) {
-        this.productTotalPrice = productToatalPrice;
+    public void setProductGstPrice(double productGstPrice) {
+        this.productGstPrice = productGstPrice;
+    }
+
+    public double getProductOriginalPrice() {
+        return productOriginalPrice;
+    }
+
+    public void setProductOriginalPrice(double productOriginalPrice) {
+        this.productOriginalPrice = productOriginalPrice;
     }
 
 
@@ -140,7 +151,8 @@ public class Product implements Parcelable{
         dest.writeInt(productId);
         dest.writeInt(productQuantity);
         dest.writeString(productSize);
-        dest.writeDouble(productTotalPrice);
+        dest.writeDouble(productOriginalPrice);
+        dest.writeDouble(productGstPrice);
         dest.writeString(productName);
         dest.writeString(productBrand);
         dest.writeString(productDescription);
@@ -169,7 +181,8 @@ public class Product implements Parcelable{
         productQuantity = in.readInt();
         productSize = in.readString();
         productUnit = in.readString();
-        productTotalPrice = in.readDouble();
+        productOriginalPrice = in.readDouble();
+        productGstPrice = in.readDouble();
     }
 
     public Product() {
@@ -186,7 +199,8 @@ public class Product implements Parcelable{
                 ", productId=" + productId +
                 ", productSize='" + productSize + '\'' +
                 ", productBrand='" + productBrand + '\'' +
-                ", productTotalPrice=" + productTotalPrice +
+                ", productOriginalPrice=" + productOriginalPrice +
+                ", productGstPrice=" + productGstPrice +
                 ", productQuantity=" + productQuantity +
                 '}';
     }

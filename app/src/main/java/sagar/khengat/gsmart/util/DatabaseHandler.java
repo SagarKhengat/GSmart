@@ -16,12 +16,13 @@ import java.util.List;
 import sagar.khengat.gsmart.R;
 import sagar.khengat.gsmart.model.Area;
 import sagar.khengat.gsmart.model.Cart;
+import sagar.khengat.gsmart.model.Category;
 import sagar.khengat.gsmart.model.Customer;
 import sagar.khengat.gsmart.model.History;
 import sagar.khengat.gsmart.model.Product;
 import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.model.Store;
-
+import sagar.khengat.gsmart.model.SubCategory;
 
 
 public class DatabaseHandler {
@@ -35,6 +36,8 @@ public class DatabaseHandler {
 	private RuntimeExceptionDao<Product, Integer> productDao;
 	private RuntimeExceptionDao<Cart, Integer> cartDao;
 	private RuntimeExceptionDao<History, Integer> historyDao;
+	private RuntimeExceptionDao<Category, Integer> categoryDao;
+	private RuntimeExceptionDao<SubCategory, Integer> subCategoryDao;
 
 
 	private DatabaseHelper databaseHelper;
@@ -62,6 +65,8 @@ public class DatabaseHandler {
 		productDao = getHelper().getProductDao();
 		cartDao = getHelper().getCartDao();
 		historyDao = getHelper().getHistoryDao();
+		categoryDao = getHelper().getCategoryDao();
+		subCategoryDao = getHelper().getSubCategoryDao();
 
 
 
@@ -201,6 +206,63 @@ public class DatabaseHandler {
 		}
 		return b;
 	}
+
+
+	public boolean checkCategory(Category email) {
+		boolean b = false;
+		List <Category> mListAllStores = fnGetAllCategory();
+		try {
+			QueryBuilder < Category, Integer > qb = categoryDao.queryBuilder();
+
+			for (Category user:
+					mListAllStores) {
+
+				if (user.getCategoryName().equals(email.getCategoryName()))
+				{
+					b = true;
+				}
+				else
+				{
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return b;
+	}
+
+
+	public boolean checkSubCategory(SubCategory email) {
+		boolean b = false;
+		List <SubCategory> mListAllStores = fnGetAllSubCategory();
+		try {
+			QueryBuilder < SubCategory, Integer > qb = subCategoryDao.queryBuilder();
+
+			for (SubCategory user:
+					mListAllStores) {
+
+				if (user.getSubCategoryName().equals(email.getSubCategoryName()))
+				{
+					b = true;
+				}
+				else
+				{
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return b;
+	}
+
 
 
 	/**
@@ -478,6 +540,47 @@ public class DatabaseHandler {
 	}
 
 
+
+	public List<Category> fnGetAllCategory() {
+		List< Category > mListIndustry = new ArrayList<>();
+
+		try {
+			QueryBuilder< Category, Integer > queryBuilder = categoryDao.queryBuilder();
+			PreparedQuery< Category > preparedQuery = null;
+			preparedQuery = queryBuilder.prepare();
+			mListIndustry = categoryDao.query( preparedQuery );
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+		} catch(OutOfMemoryError e) {
+			e.printStackTrace();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return mListIndustry;
+	}
+
+
+
+	public List<SubCategory> fnGetAllSubCategory() {
+		List< SubCategory > mListIndustry = new ArrayList<>();
+
+		try {
+			QueryBuilder< SubCategory, Integer > queryBuilder = subCategoryDao.queryBuilder();
+			PreparedQuery< SubCategory > preparedQuery = null;
+			preparedQuery = queryBuilder.prepare();
+			mListIndustry = subCategoryDao.query( preparedQuery );
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+		} catch(OutOfMemoryError e) {
+			e.printStackTrace();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return mListIndustry;
+	}
+
+
+
 	public void addStore(Store store) {
 		try
 		{
@@ -489,6 +592,31 @@ public class DatabaseHandler {
 			e.printStackTrace();
 		}
 	}
+
+	public void addCategory(Category store) {
+		try
+		{
+			categoryDao.create( store );
+		} catch(OutOfMemoryError e) {
+			e.printStackTrace();
+			Toast.makeText( context, "Problem in memory allocation. Please free some memory space and try again.", Toast.LENGTH_LONG ).show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addSubCategory(SubCategory store) {
+		try
+		{
+			subCategoryDao.create( store );
+		} catch(OutOfMemoryError e) {
+			e.printStackTrace();
+			Toast.makeText( context, "Problem in memory allocation. Please free some memory space and try again.", Toast.LENGTH_LONG ).show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 
 
 	public void addArea(Area area) {
@@ -535,6 +663,38 @@ public class DatabaseHandler {
 		}
 		return mListStores;
 	}
+	public List< SubCategory> fnGetSubCategoriesInCategory( Category area ) {
+		List <SubCategory> mListStores = new ArrayList<>();
+		List <SubCategory> mListAllStores = fnGetAllSubCategory();
+
+		try {
+//			QueryBuilder < Store, Integer > qb = storeDao.queryBuilder();
+//			Where<Store, Integer> where = qb.where();
+//
+//			where.like( "areaId", area.getAreaId() );//.or().like("customerPrintAs", "%"+nameToSearch+"%");
+//
+//
+//
+//			// It filters only data present in DB fetched at the time of sync.
+//			PreparedQuery < Store> pq = where.prepare();
+//			mListStores = storeDao.query( pq );
+
+
+			for (SubCategory store : mListAllStores)
+			{
+				if(store.getCategory().getCategoryId()==area.getCategoryId())
+				{
+					mListStores.add(store);
+				}
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return mListStores;
+	}
+
 
 	public void addProduct(Product product) {
 		try
@@ -895,4 +1055,62 @@ public class DatabaseHandler {
 
 		}
 	}
+
+
+	public Retailer getRetailer(String retailerName, String password)
+	{
+		Retailer b = null;
+		List <Retailer> mListAllStores = fnGetAllRetailer();
+		try {
+			QueryBuilder < Retailer, Integer > qb = retailerDao.queryBuilder();
+
+			for (Retailer user:
+					mListAllStores) {
+
+				if (user.getName().equals(retailerName) && user.getPassword().equals(password))
+				{
+					b = user;
+				}
+				else
+				{
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return b;
+	}
+
+	public Store getStore(String storeName)
+	{
+		Store b = null;
+		List <Store> mListAllStores = fnGetAllStore();
+		try {
+			QueryBuilder < Store, Integer > qb = storeDao.queryBuilder();
+
+			for (Store user:
+					mListAllStores) {
+
+				if (user.getStoreName().equals(storeName))
+				{
+					b = user;
+				}
+				else
+				{
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return b;
+	}
+
 }

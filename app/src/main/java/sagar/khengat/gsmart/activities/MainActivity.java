@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
                     textViewDescription.setText(product.getProductDescription());
 
-                    textPrice.setText(String.valueOf(product.getProductTotalPrice()));
+//                    textPrice.setText(String.valueOf(product.getProductTotalPrice()));
 
                     textViewSize.setText(product.getProductSize());
                     textViewunit.setText(product.getProductUnit());
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
                             textViewDescription.setText(product.getProductDescription());
 
-                            textPrice.setText(String.valueOf(product.getProductTotalPrice()));
+//                            textPrice.setText(String.valueOf(product.getProductTotalPrice()));
 
                             textViewSize.setText(product.getProductSize());
                             textViewunit.setText(product.getProductUnit());
@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString(Config.WHO, "");
 
                         //putting blank value to usertoken
-                        editor.putInt(Config.USERTOKEN,0);
+
 
                         //Saving the sharedpreferences
                         editor.commit();
@@ -398,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                double multiQ = value * product.getProductTotalPrice();
+//                double multiQ = value * product.getProductTotalPrice();
 
                 product.setProductQuantity(value);
 
@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
                 cart.setProductName(product.getProductName());
                 cart.setProductDescription(product.getProductDescription());
                 cart.setProductQuantity(product.getProductQuantity());
-                cart.setProductTotalPrice(product.getProductTotalPrice());
+//                cart.setProductTotalPrice(product.getProductTotalPrice());
 
 
 

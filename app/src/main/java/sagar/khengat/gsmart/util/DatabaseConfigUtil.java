@@ -7,12 +7,13 @@ import java.sql.SQLException;
 
 import sagar.khengat.gsmart.model.Area;
 import sagar.khengat.gsmart.model.Cart;
+import sagar.khengat.gsmart.model.Category;
 import sagar.khengat.gsmart.model.Customer;
 import sagar.khengat.gsmart.model.History;
 import sagar.khengat.gsmart.model.Product;
 import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.model.Store;
-
+import sagar.khengat.gsmart.model.SubCategory;
 
 
 /**
@@ -24,7 +25,7 @@ public class DatabaseConfigUtil extends OrmLiteConfigUtil
 	
 	
 	@SuppressWarnings("rawtypes")
-	static Class[] classes = new Class[]{Area.class,Store.class,Customer.class, Retailer.class,Product.class, Cart.class, History.class};
+	static Class[] classes = new Class[]{Area.class,Store.class,Customer.class, Retailer.class,Product.class, Cart.class, History.class, Category.class, SubCategory.class};
 	
 	public static void main(String[] args) throws SQLException, IOException {
 		writeConfigFile("ormlite_config.txt",classes);

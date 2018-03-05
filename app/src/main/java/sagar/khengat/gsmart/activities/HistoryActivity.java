@@ -140,7 +140,7 @@ public class HistoryActivity extends AppCompatActivity {
                     cart.setProductName(p.getProductName());
                     cart.setProductDescription(p.getProductDescription());
                     cart.setProductQuantity(p.getProductQuantity());
-                    cart.setProductTotalPrice(p.getProductTotalPrice());
+//                    cart.setProductTotalPrice(p.getProductTotalPrice());
                     addCart(cart);
                 }
             });

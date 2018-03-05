@@ -67,11 +67,11 @@ public class CustomcheckOut extends RecyclerView.Adapter<CustomcheckOut.ViewHold
 
         int value = product.getProductQuantity();
 
-        double multiQ = value * product.getProductTotalPrice();
+//        double multiQ = value * product.getProductTotalPrice();
 
         String stringdouble= Integer.toString(product.getProductQuantity());
-        String stringPrice= Double.toString(multiQ);
-        holder.tvTotalPrice.setText(stringPrice);
+//        String stringPrice= Double.toString(multiQ);
+//        holder.tvTotalPrice.setText(stringPrice);
         holder.tvQuantity.setText(stringdouble);
 
 

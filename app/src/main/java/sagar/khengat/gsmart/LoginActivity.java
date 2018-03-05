@@ -13,10 +13,13 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import sagar.khengat.gsmart.Constants.Config;
 import sagar.khengat.gsmart.activities.ChangePassword;
 import sagar.khengat.gsmart.activities.MainActivity;
 import sagar.khengat.gsmart.activities.MainActivityForRetailer;
+import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.util.DatabaseHandler;
 import sagar.khengat.gsmart.util.InputValidation;
 
@@ -40,6 +43,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private InputValidation inputValidation;
     private DatabaseHandler databaseHelper;
     private String who;
+    private Gson gson;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().hide();
         SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
          who = sharedPreferences.getString(Config.WHO, "");
+        gson = new Gson();
         initViews();
         initListeners();
         initObjects();
@@ -200,12 +205,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (databaseHelper.checkRetailer(textInputEditTextEmail.getText().toString().trim()
                 , textInputEditTextPassword.getText().toString().trim())) {
+
+
+            Retailer retailer = databaseHelper.getRetailer(textInputEditTextEmail.getText().toString().trim()
+                    , textInputEditTextPassword.getText().toString().trim());
+            String json = gson.toJson(retailer);
+
             //Creating a shared preference
             SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
             //Creating editor to store values to shared preferences
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(Config.NAME,textInputEditTextEmail.getText().toString().trim());
             //Adding values to editor
+            editor.putString(Config.USER,json);
             editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, true);
 //                        editor.putString(Config.NAME, userFirstName);
 //

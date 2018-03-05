@@ -16,12 +16,13 @@ import java.sql.SQLException;
 import sagar.khengat.gsmart.R;
 import sagar.khengat.gsmart.model.Area;
 import sagar.khengat.gsmart.model.Cart;
+import sagar.khengat.gsmart.model.Category;
 import sagar.khengat.gsmart.model.Customer;
 import sagar.khengat.gsmart.model.History;
 import sagar.khengat.gsmart.model.Product;
 import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.model.Store;
-
+import sagar.khengat.gsmart.model.SubCategory;
 
 
 /**
@@ -33,7 +34,7 @@ import sagar.khengat.gsmart.model.Store;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	// name of the database file for your application
-	public static final String DATABASE_NAME = "ScanQRC.db";
+	public static final String DATABASE_NAME = "Gsmart.db";
 	// any time you make changes to your database objects, you may have to
 	// increase the database version
 
@@ -49,6 +50,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private RuntimeExceptionDao<Product, Integer> productDao= null;
 	private RuntimeExceptionDao<Cart, Integer> cartDao= null;
 	private RuntimeExceptionDao<History, Integer> historyDao= null;
+	private RuntimeExceptionDao<Category, Integer> categoryDao= null;
+	private RuntimeExceptionDao<SubCategory, Integer> subCategoryDao = null;
 
 
 	 Context context1;
@@ -109,6 +112,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, Product.class);
 			TableUtils.createTable(connectionSource, Cart.class);
 			TableUtils.createTable(connectionSource, History.class);
+			TableUtils.createTable(connectionSource, Category.class);
+			TableUtils.createTable(connectionSource, SubCategory.class);
 			db.execSQL(CREATE_SCANNED_TABLE);
 
 
@@ -139,6 +144,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, Product.class, true);
 			TableUtils.dropTable(connectionSource, Cart.class, true);
 			TableUtils.dropTable(connectionSource, History.class, true);
+			TableUtils.dropTable(connectionSource, Category.class, true);
+			TableUtils.dropTable(connectionSource, SubCategory.class, true);
 
 			db.execSQL(DROP_SCANNED_TABLE);
 
@@ -176,6 +183,21 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			productDao = getRuntimeExceptionDao(Product.class);
 		}
 		return productDao;
+	}
+
+
+	public RuntimeExceptionDao<Category, Integer> getCategoryDao() {
+		if (categoryDao == null) {
+			categoryDao = getRuntimeExceptionDao(Category.class);
+		}
+		return categoryDao;
+	}
+
+	public RuntimeExceptionDao<SubCategory, Integer> getSubCategoryDao() {
+		if (subCategoryDao == null) {
+			subCategoryDao = getRuntimeExceptionDao(SubCategory.class);
+		}
+		return subCategoryDao;
 	}
 
 
