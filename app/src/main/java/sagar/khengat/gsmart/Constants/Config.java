@@ -1,5 +1,8 @@
 package sagar.khengat.gsmart.Constants;
 
+import android.content.Context;
+import android.widget.Toast;
+
 /**
  * Created by Sagar Khengat on 4/6/17.
  */
@@ -21,4 +24,7 @@ public class Config {
     public static final String USER = "user";
     public static final String NAME = "name";
 
+    public static void fnShowLongToastMessage(Context context, String message ) {
+        Toast.makeText( context, message, Toast.LENGTH_LONG ).show();
+    }
 }

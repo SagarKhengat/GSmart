@@ -1,25 +1,41 @@
 package sagar.khengat.gsmart.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import sagar.khengat.gsmart.Adapters.SpinnerAreaAdapter;
@@ -41,8 +57,9 @@ import sagar.khengat.gsmart.util.InputValidation;
  * Created by Sagar Khengat on 04/03/2018.
  */
 
-public class FragmentAddProduct extends Fragment {
+public class FragmentAddProduct extends Fragment implements View.OnClickListener {
     private TextInputLayout textInputLayoutProductName;
+    private TextInputLayout textInputLayoutProductId;
     private TextInputLayout textInputLayoutProductBrand;
     private TextInputLayout textInputLayoutProductDescription;
     private TextInputLayout textInputLayoutProductOriginalPrice;
@@ -52,6 +69,7 @@ public class FragmentAddProduct extends Fragment {
     private TextInputLayout textInputLayoutProductSize;
 
     private TextInputEditText textInputEditTextProductName;
+    private TextInputEditText textInputEditTextProductId;
     private TextInputEditText textInputEditTextProductBrand;
     private TextInputEditText textInputEditTextProductDescription;
     private TextInputEditText textInputEditTextProductOriginalPrice;
@@ -73,6 +91,8 @@ public class FragmentAddProduct extends Fragment {
     Store store;
     private SpinnerCategoryAdapter categoryAdapter;
     private SpinnerSubCategoryAdapter subCategoryAdapter;
+    String mCurrentPhotoPath;
+    Bitmap bitmap = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +111,7 @@ public class FragmentAddProduct extends Fragment {
         mDatabaseHandler = new DatabaseHandler(getActivity());
 
         textInputLayoutProductName = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductName);
+        textInputLayoutProductId = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductId);
         textInputLayoutProductBrand = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductBrand);
         textInputLayoutProductDescription = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductDescription);
         textInputLayoutProductOriginalPrice = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductOriginalPrice);
@@ -101,6 +122,7 @@ public class FragmentAddProduct extends Fragment {
         textInputLayoutProductSize= (TextInputLayout) view.findViewById(R.id.textInputLayoutProductSize);
 
         textInputEditTextProductName = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductName);
+        textInputEditTextProductId = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductId);
         textInputEditTextProductBrand = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductBrand);
         textInputEditTextProductDescription = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductDescription);
         textInputEditTextProductOriginalPrice = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductOriginalPrice);
@@ -129,15 +151,24 @@ public class FragmentAddProduct extends Fragment {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
+
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
+            }
         }
-        Category c = new Category();
-        c.setCategoryId(0);
-         c.setCategoryName("Select Category");
-        mDatabaseHandler.addCategory(c);
-        SubCategory c1 = new SubCategory();
-        c1.setSubCategoryId(0);
-        c1.setSubCategoryName("Select Sub-Category");
-        mDatabaseHandler.addSubCategory(c1);
+
+
+        iv_camera.setOnClickListener(this);
+        iv_gallery.setOnClickListener(this);
+
+//        Category c = new Category();
+//        c.setCategoryId(0);
+//         c.setCategoryName("Select Category");
+//        mDatabaseHandler.addCategory(c);
+//        SubCategory c1 = new SubCategory();
+//        c1.setSubCategoryId(0);
+//        c1.setSubCategoryName("Select Sub-Category");
+//        mDatabaseHandler.addSubCategory(c1);
 
         Category category1 = new Category();
         category1.setCategoryName("Food");
@@ -245,7 +276,7 @@ public class FragmentAddProduct extends Fragment {
         spinnerSubCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               SubCategory  s = subCategoryAdapter.getItem(position);
+               SubCategory s = subCategoryAdapter.getItem(position);
 
 
             }
@@ -300,4 +331,177 @@ public class FragmentAddProduct extends Fragment {
         }
     }
 
-}
+    @Override
+    public void onClick(View v) {
+        switch ( v.getId() ) {
+            case R.id.iv_camera:
+                if (isCameraAvailable(getActivity())) {
+
+
+                    try {
+                        File photoFile = null;
+
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+                        // Create the File where the photo should go
+
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            // Error occurred while creating the File
+                        }
+
+                        if (photoFile != null) {
+                            Uri photoURI = null;
+
+                            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                                photoURI = Uri.fromFile(photoFile);
+                            } else {
+                                photoURI = FileProvider.getUriForFile(getActivity(), "com.example.android.fileprovider",
+                                        photoFile);
+                            }
+
+                            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(cameraIntent, 0);
+                        }
+                    } catch (Exception e) {
+                        Config.fnShowLongToastMessage(getActivity(), "Make sure camera is available.");
+                    }
+                } else {
+                    Config.fnShowLongToastMessage(getActivity(), "Make sure camera is available.");
+                }
+                break;
+            case R.id.iv_gallery:
+
+                try {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent,
+                            "Pick from gallery"), 1);
+                } catch (Exception e) {
+                    Config.fnShowLongToastMessage(getActivity(), "Something went wrong..please try again..");
+                }
+
+
+                break;
+        }
+    }
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+    public static boolean isCameraAvailable(Context context) {
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
+    }
+
+    //Handle choose image,
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ( resultCode == Activity.RESULT_OK ) {
+            if ( requestCode == 1 ) {     //Gallery image
+                try {
+
+                    Uri selectedImageUri = data.getData();
+
+
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+                    image.setImageBitmap(bitmap);
+                    saveImageToSDCard(bitmap);
+
+
+
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "Something went wrong..please try again..", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            } else {            //Captured image
+                try {
+                    int targetW = 500;
+                    int targetH = 500;
+
+                    // Get the dimensions of the bitmap
+                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                    bmOptions.inJustDecodeBounds = true;
+                    BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+                    int photoW = bmOptions.outWidth;
+                    int photoH = bmOptions.outHeight;
+
+                    // Determine how much to scale down the image
+                    int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+                    // Decode the image file into a Bitmap sized to fill the View
+                    bmOptions.inJustDecodeBounds = false;
+                    bmOptions.inSampleSize = scaleFactor;
+                    bmOptions.inPurgeable = true;
+
+
+//				Bundle extras = data.getExtras();
+                    bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+                    image.setImageBitmap(bitmap);
+                    saveImageToSDCard(bitmap);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+public void saveImageToSDCard(Bitmap bitmap) {
+
+        File myDir = new File(
+        Environment.getExternalStorageDirectory().getPath()
+        + File.separator
+        + FOLDER_NAME);
+
+        myDir.mkdirs();
+
+        String fname = textInputEditTextProductName.getText().toString().trim()+"-"+textInputEditTextProductId.getText().toString().trim()  + ".jpg";
+        File file = new File(myDir, fname);
+        if (file.exists())
+        file.delete();
+        try {
+        FileOutputStream out = new FileOutputStream(file);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+        out.flush();
+        out.close();
+        Toast.makeText(getContext(),"Product image Saved successfully..",
+        Toast.LENGTH_LONG).show();
+            try
+            {
+                DeleteRecursive(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        } catch (Exception e) {
+        e.printStackTrace();
+        Toast.makeText(getContext(),"Sorry! Failed to save Image...!!!",
+        Toast.LENGTH_LONG).show();
+        }
+        }
+    public static void DeleteRecursive(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                DeleteRecursive(child);
+
+        fileOrDirectory.delete();
+
+    }
+
+        }
