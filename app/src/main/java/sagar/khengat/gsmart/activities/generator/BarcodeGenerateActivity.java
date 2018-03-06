@@ -188,7 +188,7 @@ public class BarcodeGenerateActivity extends AppCompatActivity implements Adapte
                 }
                 else
                 {
-                    product.setProductDescription(textInputEditTextProductDescription.getText().toString().trim());
+//                    product.setProductDescription(textInputEditTextProductDescription.getText().toString().trim());
                 }
 
                 if(!inputValidation.isInputEditTextFilled(textInputEditTextProductPrice, textInputLayoutProductPrice, "Enter Product Price"))
@@ -217,7 +217,7 @@ public class BarcodeGenerateActivity extends AppCompatActivity implements Adapte
                     product.setProductSize(textInputEditTextProductSize.getText().toString().trim());
                 }
                 product.setStore(storeBarcode);
-                product.setProductId(getUniqueId());
+//                product.setProductId(getUniqueId());
                 text2Barcode = gson.toJson(product);
 
                 if(textInputEditTextProductName.getText().toString().equals("")){

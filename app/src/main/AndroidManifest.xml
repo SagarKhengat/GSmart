@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -66,7 +66,8 @@
         <activity android:name=".activities.ChangePassword" />
         <activity android:name=".PreLoginActivity" />
         <activity android:name=".RegisterRetailer" />
-        <activity android:name=".activities.MainActivityForRetailer"></activity>
+        <activity android:name=".activities.MainActivityForRetailer" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.android.fileprovider"
@@ -74,8 +75,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
+
+        <activity android:name=".activities.SelectCategory"></activity>
     </application>
 
 </manifest>

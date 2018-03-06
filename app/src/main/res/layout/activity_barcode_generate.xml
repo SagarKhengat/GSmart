@@ -125,7 +125,7 @@
                         android:id="@+id/textInputEditTextProductSize"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Enter Product Quantity"
+                        android:hint="Enter Product Size"
                         android:inputType="number"
                         android:maxLines="1"
                         android:textColor="@android:color/background_dark" />

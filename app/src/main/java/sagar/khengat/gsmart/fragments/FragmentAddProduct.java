@@ -23,12 +23,16 @@ import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -93,6 +97,8 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
     private SpinnerSubCategoryAdapter subCategoryAdapter;
     String mCurrentPhotoPath;
     Bitmap bitmap = null;
+    Category category;
+    SubCategory subCategory;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,23 +118,22 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
 
         textInputLayoutProductName = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductName);
         textInputLayoutProductId = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductId);
-        textInputLayoutProductBrand = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductBrand);
-        textInputLayoutProductDescription = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductDescription);
+
         textInputLayoutProductOriginalPrice = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductOriginalPrice);
         textInputLayoutProductGstPrice = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductGstPrice);
         textInputLayoutProductUnit = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductUnit);
 
         textInputLayoutProductStore = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductStore);
-        textInputLayoutProductSize= (TextInputLayout) view.findViewById(R.id.textInputLayoutProductSize);
+        textInputLayoutProductSize= (TextInputLayout) view.findViewById(R.id.textInputLayoutProductQuantity);
 
         textInputEditTextProductName = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductName);
         textInputEditTextProductId = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductId);
-        textInputEditTextProductBrand = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductBrand);
+
         textInputEditTextProductDescription = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductDescription);
         textInputEditTextProductOriginalPrice = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductOriginalPrice);
         textInputEditTextProductGstPrice = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductGstPrice);
         textInputEditTextProductUnit = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductUnit);
-        textInputEditTextProductSize = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductSize);
+        textInputEditTextProductSize = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductQuantity);
         textInputEditTextProductStore = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductStore);
         image = (ImageView) view.findViewById(R.id.image);
         iv_camera = (ImageView) view.findViewById(R.id.iv_camera);
@@ -260,7 +265,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Category area = categoryAdapter.getItem(position);
-
+                    category = area;
 
                     loadSpinnerSubCategory(area);
 
@@ -277,7 +282,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                SubCategory s = subCategoryAdapter.getItem(position);
-
+                subCategory = s;
 
             }
 
@@ -386,6 +391,97 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
 
 
                 break;
+
+            case R.id.fab:
+
+
+                        try {
+                            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0); // this method use to close keyboard forcefully
+                                                 }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                        if (!inputValidation.isInputEditTextFilled(textInputEditTextProductName, textInputLayoutProductName, "Enter Product Name")) {
+                            return;
+                        }
+                        else
+                        {
+                            product.setProductName(textInputEditTextProductName.getText().toString().trim());
+                        }
+
+
+
+
+
+                        if(!inputValidation.isInputEditTextFilled(textInputEditTextProductOriginalPrice, textInputLayoutProductOriginalPrice, "Enter Product Original Price"))
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            product.setProductOriginalPrice(Double.parseDouble(textInputEditTextProductOriginalPrice.getText().toString().trim()));
+                        }
+                if(!inputValidation.isInputEditTextFilled(textInputEditTextProductGstPrice, textInputLayoutProductGstPrice, "Enter Product Gst based Price"))
+                {
+                    return;
+                }
+                else
+                {
+                    product.setProductGstPrice(Double.parseDouble(textInputEditTextProductGstPrice.getText().toString().trim()));
+                }
+
+                        if(!inputValidation.isInputEditTextFilled(textInputEditTextProductUnit, textInputLayoutProductUnit, "Enter Product Unit"))
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            product.setProductUnit(textInputEditTextProductUnit.getText().toString().trim());
+                        }
+                        if(!inputValidation.isInputEditTextFilled(textInputEditTextProductSize, textInputLayoutProductSize, "Enter Product Size"))
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            product.setProductSize(textInputEditTextProductSize.getText().toString().trim());
+                        }
+                if(!inputValidation.isInputEditTextFilled(textInputEditTextProductId, textInputLayoutProductId, "Enter Product Id"))
+                {
+                    return;
+                }
+                else
+                {
+                    product.setProductId(textInputEditTextProductId.getText().toString().trim());
+                }
+                        product.setStore(store);
+                        product.setProductCategory(category);
+                        product.setProductSubCategory(subCategory);
+
+
+
+                        if(textInputEditTextProductName.getText().toString().equals("")){
+                            Toast.makeText(getActivity(), getResources().getText(R.string.error_text_first), Toast.LENGTH_SHORT).show();
+                        } else {
+
+                            try{
+
+
+                                mDatabaseHandler.addProduct(product);
+
+
+                                saveImageToSDCard(bitmap,product.getProductName(),store.getStoreName());
+                                Toast.makeText(getActivity(), getResources().getText(R.string.success_generate), Toast.LENGTH_LONG).show();
+
+                            } catch (Exception e){
+                                Toast.makeText(getActivity(), getResources().getText(R.string.error_generate), Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                break;
+
         }
     }
     private File createImageFile() throws IOException {
@@ -418,7 +514,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
 
                     bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
                     image.setImageBitmap(bitmap);
-                    saveImageToSDCard(bitmap);
+
 
 
 
@@ -450,7 +546,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
 //				Bundle extras = data.getExtras();
                     bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
                     image.setImageBitmap(bitmap);
-                    saveImageToSDCard(bitmap);
+
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -459,16 +555,17 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
     }
 
 
-public void saveImageToSDCard(Bitmap bitmap) {
+public void saveImageToSDCard(Bitmap bitmap,String name,String areaName) {
 
         File myDir = new File(
         Environment.getExternalStorageDirectory().getPath()
         + File.separator
-        + FOLDER_NAME);
+        +FOLDER_NAME+  File.separator
+                + areaName);
 
         myDir.mkdirs();
 
-        String fname = textInputEditTextProductName.getText().toString().trim()+"-"+textInputEditTextProductId.getText().toString().trim()  + ".jpg";
+        String fname = name + ".jpg";
         File file = new File(myDir, fname);
         if (file.exists())
         file.delete();

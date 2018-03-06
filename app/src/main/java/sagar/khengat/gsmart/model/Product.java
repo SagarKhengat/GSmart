@@ -12,13 +12,13 @@ public class Product implements Parcelable{
     private String productName;
     @DatabaseField(canBeNull = true)
 
-    private String productDescription;
+    private Category productCategory;
     @DatabaseField(foreign = true)
     private Store store;
 
     @DatabaseField(canBeNull = true)
 
-    private String productCartId;
+    private SubCategory productSubCategory;
     @DatabaseField(canBeNull = true)
 
     private String productUnit;
@@ -26,7 +26,7 @@ public class Product implements Parcelable{
 
     @DatabaseField(canBeNull = true,id = true)
 
-    private int productId;
+    private String productId;
 
 
     @DatabaseField(canBeNull = true)
@@ -74,13 +74,7 @@ public class Product implements Parcelable{
         this.productUnit = productUnit;
     }
 
-    public String getProductCartId() {
-        return productCartId;
-    }
 
-    public void setProductCartId(String productCartId) {
-        this.productCartId = productCartId;
-    }
     public int getProductQuantity() {
         return productQuantity;
     }
@@ -90,14 +84,20 @@ public class Product implements Parcelable{
     }
 
 
-
-
-    public String getProductDescription() {
-        return productDescription;
+    public Category getProductCategory() {
+        return productCategory;
     }
 
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
+    public void setProductCategory(Category productCategory) {
+        this.productCategory = productCategory;
+    }
+
+    public SubCategory getProductSubCategory() {
+        return productSubCategory;
+    }
+
+    public void setProductSubCategory(SubCategory productSubCategory) {
+        this.productSubCategory = productSubCategory;
     }
 
     public String getProductName() {
@@ -117,11 +117,11 @@ public class Product implements Parcelable{
         this.store = store;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
@@ -148,16 +148,16 @@ public class Product implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(productId);
+        dest.writeString(productId);
         dest.writeInt(productQuantity);
         dest.writeString(productSize);
         dest.writeDouble(productOriginalPrice);
         dest.writeDouble(productGstPrice);
         dest.writeString(productName);
         dest.writeString(productBrand);
-        dest.writeString(productDescription);
+        dest.writeValue(productCategory);
         dest.writeString(productUnit);
-        dest.writeString(productCartId);
+        dest.writeValue(productSubCategory);
         dest.writeValue(store);
     }
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -172,12 +172,12 @@ public class Product implements Parcelable{
         }
     };
     public Product(Parcel in) {
-        productId = in.readInt();
+        productId = in.readString();
         productName = in.readString();
         store = (Store) in.readValue(Product.class.getClassLoader());
         productBrand =in.readString();
-        productCartId = in.readString();
-        productDescription = in.readString();
+        productCategory = (Category) in.readValue(Product.class.getClassLoader());
+        productSubCategory = (SubCategory) in.readValue(Product.class.getClassLoader());
         productQuantity = in.readInt();
         productSize = in.readString();
         productUnit = in.readString();
@@ -192,9 +192,9 @@ public class Product implements Parcelable{
     public String toString() {
         return "Product{" +
                 "productName='" + productName + '\'' +
-                ", productDescription='" + productDescription + '\'' +
+                ", productSubCategory='" + productSubCategory + '\'' +
                 ", store=" + store +
-                ", productCartId='" + productCartId + '\'' +
+                ", productCategory='" + productCategory + '\'' +
                 ", productUnit='" + productUnit + '\'' +
                 ", productId=" + productId +
                 ", productSize='" + productSize + '\'' +

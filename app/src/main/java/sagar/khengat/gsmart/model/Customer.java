@@ -15,10 +15,12 @@ public class Customer implements Parcelable {
     @DatabaseField(canBeNull = true)
     private String name;
     @DatabaseField(canBeNull = true,unique = true)
-    private String email;
+    private String contactNo;
     @DatabaseField(canBeNull = true)
     private String password;
 
+    @DatabaseField(canBeNull = true)
+    private String address;
     public int getId() {
         return id;
     }
@@ -35,12 +37,20 @@ public class Customer implements Parcelable {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getContactNo() {
+        return contactNo;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setContactNo(String contactNo) {
+        this.contactNo = contactNo;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPassword() {
@@ -61,8 +71,9 @@ public class Customer implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(name);
-        dest.writeString(email);
+        dest.writeString(contactNo);
         dest.writeString(password);
+        dest.writeString(address);
 
     }
 
@@ -79,8 +90,9 @@ public class Customer implements Parcelable {
     };
     public Customer(Parcel in) {
         name = in.readString();
-        email = in.readString();
+        contactNo = in.readString();
         password = in.readString();
+        address = in.readString();
         id = in.readInt();
     }
 
@@ -89,8 +101,9 @@ public class Customer implements Parcelable {
         return "Customer{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
+                ", contactNo='" + contactNo + '\'' +
                 ", password='" + password + '\'' +
+                ", address='" + address + '\'' +
                 '}';
     }
 

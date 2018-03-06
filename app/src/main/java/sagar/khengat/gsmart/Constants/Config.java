@@ -1,7 +1,10 @@
 package sagar.khengat.gsmart.Constants;
 
 import android.content.Context;
+import android.os.Environment;
 import android.widget.Toast;
+
+import java.io.File;
 
 /**
  * Created by Sagar Khengat on 4/6/17.
@@ -16,6 +19,9 @@ public class Config {
 
 
     public static final String WHO = "who";
+    public static final String PATH = Environment.getExternalStorageDirectory().getPath()
+            + File.separator
+            +"GSmart"+  File.separator;
     public static final String CUSTOMER = "customer";
 
     public static final String RETAILER = "retailer";

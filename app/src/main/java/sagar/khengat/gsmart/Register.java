@@ -29,14 +29,16 @@ public class Register extends AppCompatActivity implements Spinner.OnItemSelecte
     private NestedScrollView nestedScrollView;
 
     private TextInputLayout textInputLayoutName;
-    private TextInputLayout textInputLayoutEmail;
+    private TextInputLayout textInputLayoutContactNo;
     private TextInputLayout textInputLayoutPassword;
     private TextInputLayout textInputLayoutConfirmPassword;
+    private TextInputLayout textInputLayoutAddress;
 
     private TextInputEditText textInputEditTextName;
-    private TextInputEditText textInputEditTextEmail;
+    private TextInputEditText textInputEditTextContactNo;
     private TextInputEditText textInputEditTextPassword;
     private TextInputEditText textInputEditTextConfirmPassword;
+    private TextInputEditText textInputEditTextAddress;
 
     private AppCompatButton appCompatButtonRegister;
     private AppCompatTextView appCompatTextViewLoginLink;
@@ -45,7 +47,7 @@ public class Register extends AppCompatActivity implements Spinner.OnItemSelecte
     private DatabaseHandler databaseHelper;
     String who;
     Customer customer;
-    Retailer retailer;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,14 +68,16 @@ public class Register extends AppCompatActivity implements Spinner.OnItemSelecte
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
 
         textInputLayoutName = (TextInputLayout) findViewById(R.id.textInputLayoutName);
-        textInputLayoutEmail = (TextInputLayout) findViewById(R.id.textInputLayoutEmail);
+        textInputLayoutContactNo = (TextInputLayout) findViewById(R.id.textInputLayoutContact);
         textInputLayoutPassword = (TextInputLayout) findViewById(R.id.textInputLayoutPassword);
         textInputLayoutConfirmPassword = (TextInputLayout) findViewById(R.id.textInputLayoutConfirmPassword);
+        textInputLayoutAddress= (TextInputLayout) findViewById(R.id.textInputLayoutCustomerAddress);
 
         textInputEditTextName = (TextInputEditText) findViewById(R.id.textInputEditTextName);
-        textInputEditTextEmail = (TextInputEditText) findViewById(R.id.textInputEditTextEmail);
+        textInputEditTextContactNo = (TextInputEditText) findViewById(R.id.textInputEditTextContact);
         textInputEditTextPassword = (TextInputEditText) findViewById(R.id.textInputEditTextPassword);
         textInputEditTextConfirmPassword = (TextInputEditText) findViewById(R.id.textInputEditTextConfirmPassword);
+        textInputEditTextAddress= (TextInputEditText) findViewById(R.id.textInputEditTextCustomerAddress);
 
         appCompatButtonRegister = (AppCompatButton) findViewById(R.id.appCompatButtonRegister);
 
@@ -97,7 +101,7 @@ public class Register extends AppCompatActivity implements Spinner.OnItemSelecte
         inputValidation = new InputValidation(activity);
         databaseHelper = new DatabaseHandler(activity);
         customer = new Customer();
-        retailer = new Retailer();
+
 
     }
 
@@ -130,10 +134,10 @@ public class Register extends AppCompatActivity implements Spinner.OnItemSelecte
         if (!inputValidation.isInputEditTextFilled(textInputEditTextName, textInputLayoutName, getString(R.string.error_message_name))) {
             return;
         }
-        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextContactNo, textInputLayoutContactNo, getString(R.string.error_message_email))) {
             return;
         }
-        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
+        if (!inputValidation.isInputEditTextEmail(textInputEditTextContactNo, textInputLayoutContactNo, getString(R.string.error_message_email))) {
             return;
         }
         if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, getString(R.string.error_message_password))) {
@@ -144,11 +148,12 @@ public class Register extends AppCompatActivity implements Spinner.OnItemSelecte
             return;
         }
 
-        if (!databaseHelper.checkCustomer(textInputEditTextEmail.getText().toString().trim())) {
+        if (!databaseHelper.checkCustomer(textInputEditTextName.getText().toString().trim())) {
 
             customer.setName(textInputEditTextName.getText().toString().trim());
-            customer.setEmail(textInputEditTextEmail.getText().toString().trim());
+            customer.setContactNo(textInputEditTextContactNo.getText().toString().trim());
             customer.setPassword(textInputEditTextPassword.getText().toString().trim());
+            customer.setAddress(textInputEditTextAddress.getText().toString().trim());
 
             databaseHelper.addCustomer(customer);
 
@@ -177,9 +182,10 @@ public class Register extends AppCompatActivity implements Spinner.OnItemSelecte
      */
     private void emptyInputEditText() {
         textInputEditTextName.setText(null);
-        textInputEditTextEmail.setText(null);
+        textInputEditTextContactNo.setText(null);
         textInputEditTextPassword.setText(null);
         textInputEditTextConfirmPassword.setText(null);
+        textInputEditTextAddress.setText(null);
     }
 
     @Override
