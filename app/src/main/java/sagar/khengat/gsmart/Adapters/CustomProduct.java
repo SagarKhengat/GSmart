@@ -69,15 +69,16 @@ public class CustomProduct extends RecyclerView.Adapter<CustomProduct.ViewHolder
 
         holder.textViewName.setText(product.getProductName());
         holder.tvSize.setText(product.getProductSize());
-        holder.tvUnit.setText(" "+product.getProductUnit());
+
         holder.tvUnitsell.setText("/ "+product.getProductUnit());
         holder.tvUnitact.setText("/ "+product.getProductUnit());
-        holder.textViewBrand.setText(product.getProductBrand());
+        holder.textViewCategory.setText(product.getProductCategory().getCategoryName());
+        holder.textViewSubCategory.setText(product.getProductSubCategory().getSubCategoryName());
         holder.textActualPrice.setText(Double.toString(product.getProductOriginalPrice()));
         holder.textSellingPrice.setText(Double.toString(product.getProductGstPrice()));
-        String stringdouble= Integer.toString(product.getProductQuantity());
+        
 
-        holder.tvQuantity.setText(stringdouble);
+
 
 
        double a = new Double(product.getProductOriginalPrice());
@@ -122,14 +123,15 @@ public class CustomProduct extends RecyclerView.Adapter<CustomProduct.ViewHolder
     class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView imageView;
         public TextView textViewName;
-        public TextView textViewBrand;
+        public TextView textViewCategory;
+        public TextView textViewSubCategory;
         public TextView textActualPrice;
         public TextView textSellingPrice;
         public TextView tvQuantity;
-        public TextView tvUnit;
+
         public TextView tvUnitsell;
         public TextView tvUnitact;
-        public TextView tvTotalPrice;
+
         public TextView tvOff;
         public TextView tvSize;
         public Button add;
@@ -138,32 +140,23 @@ public class CustomProduct extends RecyclerView.Adapter<CustomProduct.ViewHolder
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.product_image);
             textViewName = (TextView) itemView.findViewById(R.id.product_name);
-            textViewBrand= (TextView) itemView.findViewById(R.id.product_brand);
+            textViewCategory= (TextView) itemView.findViewById(R.id.product_category);
+            textViewSubCategory= (TextView) itemView.findViewById(R.id.product_subcategory);
             textActualPrice= (TextView) itemView.findViewById(R.id.actual_price);
             textSellingPrice= (TextView) itemView.findViewById(R.id.selling_price);
-            tvQuantity = (TextView) itemView.findViewById(R.id.quantity);
-            tvUnit = (TextView) itemView.findViewById(R.id.unit);
+
+
             tvUnitsell = (TextView) itemView.findViewById(R.id.unitsell);
             tvUnitact = (TextView) itemView.findViewById(R.id.unitact);
-            tvTotalPrice = (TextView)itemView.findViewById(R.id.total_price);
+
             tvOff = (TextView)itemView.findViewById(R.id.off);
             tvSize = (TextView)itemView.findViewById(R.id.size);
-            add = (Button) itemView.findViewById(R.id.add);
 
 
 
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickListener.imageViewOnClick(v, getAdapterPosition());
-                }
-            });
-            add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickListener.buttonViewOnClick(v, getAdapterPosition());
-                }
-            });
+
+
+
         }
         }
     }

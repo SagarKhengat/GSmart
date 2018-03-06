@@ -69,13 +69,13 @@ public class FragmentRetailerMainActivity extends Fragment implements View.OnCli
                 setUpFragment(new FragmentAddProduct());
                 break;
             case R.id.appCompatButtonViewProduct:
-
+                setUpFragment(new FragmentViewProduct());
                 break;
             case R.id.appCompatButtonDeleteProduct:
-
+                setUpFragment(new FragmentDeleteProduct());
                 break;
             case R.id.appCompatButtonUpdateProduct:
-
+                setUpFragment(new FragmentUpdateProduct());
                 break;
         }
     }

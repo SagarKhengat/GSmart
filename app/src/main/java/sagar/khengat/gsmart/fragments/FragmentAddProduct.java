@@ -81,6 +81,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
     private TextInputEditText textInputEditTextProductUnit;
     private TextInputEditText textInputEditTextProductSize;
     private TextInputEditText textInputEditTextProductStore;
+
     Product product;
     ImageView image,iv_camera, iv_gallery;
     String FOLDER_NAME="GSmart";
@@ -140,9 +141,10 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
         iv_gallery = (ImageView) view.findViewById(R.id.iv_gallery);
         spinnerCategory = (Spinner) view.findViewById(R.id.spinnerCategory);
         spinnerSubCategory = (Spinner) view.findViewById(R.id.spinnerSubCategory);
-
+        fab = (FloatingActionButton)view.findViewById(R.id.fab);
         gson = new Gson();
         store = new Store();
+        product = new Product();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String json = sharedPreferences.getString(Config.USER, "");
         retailer = gson.fromJson(json,Retailer.class);
@@ -165,6 +167,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
 
         iv_camera.setOnClickListener(this);
         iv_gallery.setOnClickListener(this);
+        fab.setOnClickListener(this);
 
 //        Category c = new Category();
 //        c.setCategoryId(0);

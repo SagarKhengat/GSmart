@@ -213,13 +213,13 @@ public class CartActivity extends AppCompatActivity {
                         {
                             History history = new History();
                            Product product =  mDatabaeHelper.fnGetProductFromCart(cart);
-                            history.setProductCartId(product.getProductId());
+//                            history.setProductCartId(product.getProductId());
                             history.setProductSize(product.getProductSize());
                             history.setStore(storeBarcode);
                             history.setProductUnit(product.getProductUnit());
                             history.setProductBrand(product.getProductBrand());
                             history.setProductName(product.getProductName());
-                            history.setProductDescription(product.getProductDescription());
+//                            history.setProductDescription(product.getProductDescription());
                             history.setProductQuantity(product.getProductQuantity());
 //                            history.setProductTotalPrice(product.getProductTotalPrice());
 

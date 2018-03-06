@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
                     textViewName.setText(product.getProductName());
 
-                    textViewDescription.setText(product.getProductDescription());
+//                    textViewDescription.setText(product.getProductDescription());
 
 //                    textPrice.setText(String.valueOf(product.getProductTotalPrice()));
 
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
                             textViewName.setText(product.getProductName());
 
-                            textViewDescription.setText(product.getProductDescription());
+//                            textViewDescription.setText(product.getProductDescription());
 
 //                            textPrice.setText(String.valueOf(product.getProductTotalPrice()));
 
@@ -407,13 +407,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                cart.setProductCartId(product.getProductId());
+//                cart.setProductCartId(product.getProductId());
                 cart.setProductSize(product.getProductSize());
                 cart.setStore(storeBarcode);
                 cart.setProductUnit(product.getProductUnit());
                 cart.setProductBrand(product.getProductBrand());
                 cart.setProductName(product.getProductName());
-                cart.setProductDescription(product.getProductDescription());
+//                cart.setProductDescription(product.getProductDescription());
                 cart.setProductQuantity(product.getProductQuantity());
 //                cart.setProductTotalPrice(product.getProductTotalPrice());
 

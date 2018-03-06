@@ -1,10 +1,12 @@
 package sagar.khengat.gsmart.util;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
@@ -1145,6 +1147,46 @@ public class DatabaseHandler {
 			e.printStackTrace();
 		}
 		return mListStores;
+	}
+
+
+	public void updateProduct(Product product)
+	{
+
+		try
+		{
+			UpdateBuilder<Product, Integer> deleteBuilder = productDao.updateBuilder();
+			deleteBuilder.updateColumnValue("productName", product.getProductName());
+			deleteBuilder.updateColumnValue("productSize", product.getProductSize());
+			deleteBuilder.updateColumnValue("productOriginalPrice", product.getProductOriginalPrice());
+			deleteBuilder.updateColumnValue("productGstPrice", product.getProductGstPrice());
+			deleteBuilder.updateColumnValue("productUnit", product.getProductUnit());
+
+			deleteBuilder.where().eq("productId", product.getProductId());
+			deleteBuilder.update();
+
+
+		}
+		catch(OutOfMemoryError e)
+		{
+			e.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteProduct(Product product)
+	{
+		try {
+			DeleteBuilder<Product, Integer> deleteBuilder = productDao
+					.deleteBuilder();
+			deleteBuilder.where().eq("productId", product.getProductId());
+			deleteBuilder.delete();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

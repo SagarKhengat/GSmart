@@ -10,13 +10,13 @@ public class Product implements Parcelable{
     @DatabaseField(canBeNull = true)
 
     private String productName;
-    @DatabaseField(canBeNull = true)
+    @DatabaseField(foreign = true)
 
     private Category productCategory;
     @DatabaseField(foreign = true)
     private Store store;
 
-    @DatabaseField(canBeNull = true)
+    @DatabaseField(foreign = true)
 
     private SubCategory productSubCategory;
     @DatabaseField(canBeNull = true)
