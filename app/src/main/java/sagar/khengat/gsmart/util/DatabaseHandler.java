@@ -995,7 +995,7 @@ public class DatabaseHandler {
 
 			for (Cart product : mListAllStores)
 			{
-				if(product.getProductCartId() == cart.getProductCartId())
+				if(product.getProductId().equals(cart.getProductId()))
 				{
 					return product;
 				}

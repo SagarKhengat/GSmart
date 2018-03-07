@@ -76,7 +76,7 @@
             android:layout_marginTop="20dp">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/textInputEditTextEmail"
+                android:id="@+id/textInputEditTextContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"

@@ -10,6 +10,7 @@ import android.util.Log;
 
 import sagar.khengat.gsmart.Constants.Config;
 import sagar.khengat.gsmart.activities.MainActivityForRetailer;
+import sagar.khengat.gsmart.activities.SelectCategory;
 
 
 public class SplashScreen extends Activity {
@@ -48,7 +49,7 @@ public class SplashScreen extends Activity {
                 if(loggedIn){
                     //We will start the Profile Activity
                     if (who.equals(Config.CUSTOMER)) {
-                        Intent intent = new Intent(SplashScreen.this, StoreListing.class);
+                        Intent intent = new Intent(SplashScreen.this, SelectCategory.class);
                         startActivity(intent);
 
                         finish();

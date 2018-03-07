@@ -19,6 +19,7 @@ import sagar.khengat.gsmart.Constants.Config;
 import sagar.khengat.gsmart.activities.ChangePassword;
 import sagar.khengat.gsmart.activities.MainActivity;
 import sagar.khengat.gsmart.activities.MainActivityForRetailer;
+import sagar.khengat.gsmart.activities.SelectCategory;
 import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.util.DatabaseHandler;
 import sagar.khengat.gsmart.util.InputValidation;
@@ -175,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         //Saving values to editor
                         editor.apply();
-            Intent accountsIntent = new Intent(activity, StoreListing.class);
+            Intent accountsIntent = new Intent(activity, SelectCategory.class);
             accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
             emptyInputEditText();
             startActivity(accountsIntent);

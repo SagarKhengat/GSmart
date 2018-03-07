@@ -180,7 +180,7 @@ public class BarcodeGenerateActivity extends AppCompatActivity implements Adapte
                 }
                 else
                 {
-                    product.setProductBrand(textInputEditTextProductBrand.getText().toString().trim());
+//                    product.setProductBrand(textInputEditTextProductBrand.getText().toString().trim());
                 }
 
                 if(textInputEditTextProductDescription.getText().toString().trim()==null)

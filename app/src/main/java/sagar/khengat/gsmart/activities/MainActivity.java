@@ -15,6 +15,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +29,11 @@ import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import sagar.khengat.gsmart.Adapters.CustomProduct;
+import sagar.khengat.gsmart.Adapters.CustomProductForCustomerAdapter;
 import sagar.khengat.gsmart.Constants.Config;
 import sagar.khengat.gsmart.LoginActivity;
 import sagar.khengat.gsmart.PreLoginActivity;
@@ -34,73 +41,43 @@ import sagar.khengat.gsmart.R;
 import sagar.khengat.gsmart.activities.generator.GenerateActivity;
 import sagar.khengat.gsmart.model.Cart;
 import sagar.khengat.gsmart.model.Product;
+import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.model.Store;
 import sagar.khengat.gsmart.util.BadgeView;
 import sagar.khengat.gsmart.util.BottomNavigationViewHelper;
 import sagar.khengat.gsmart.util.DatabaseHandler;
-
+import sagar.khengat.gsmart.util.MyAdapterListener;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTvInformation;
-    private BottomNavigationView action_navigation;
+
+
     final Activity activity = this;
-    private String qrcode = "", qrcodeFormat = "";
-    private DatabaseHandler mDatabaeHelper;
-    private static final String STATE_QRCODE = MainActivity.class.getName();
-    private static final String STATE_QRCODEFORMAT = "";
 
 
-    public TextView textViewName;
-    public TextView textViewSize;
-    public TextView textViewunit;
-    public TextView textViewDescription;
-    public TextView textPrice;
-    public TextView textStore;
-    public TextView textBrand;
+
+
     Product product;
     Cart cart;
-    public CardView cardView;
+
     LayerDrawable icon;
     static BadgeView badge;
-    Gson gson;
+
     Store storeBarcode;
     String who;
-    /**
-     * This method handles the main navigation
-     */
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_history:
-                    startActivity(new Intent(MainActivity.this, HistoryActivity.class));
-                    return true;
-                case R.id.navigation_scan:
-                    zxingScan();
-                    return true;
-                case R.id.navigation_generate:
-                    startActivity(new Intent(MainActivity.this, GenerateActivity.class));
-                    return true;
-                //Following cases using a method from ButtonHandler
-                case R.id.main_action_navigation_addToCart:
-                    addCart();
-                    return true;
-                case R.id.main_action_navigation_reset:
-                    startActivity(new Intent(MainActivity.this, MainActivity.class));
-                    finish();
-                    return true;
 
 
 
-            }
-            return false;
-        }
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private List<Product> productList;
+    private RecyclerView.Adapter adapter;
+    private DatabaseHandler mDatabaseHandler;
+    Gson gson;
+    Retailer retailer;
+    Store store;
 
-    };
 
     /**
      * This method saves all data before the Activity will be destroyed
@@ -119,23 +96,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        cardView = (CardView) findViewById(R.id.card_view);
-        mTvInformation = (TextView) findViewById(R.id.tvTxtqrcode);
-        textViewName = (TextView) findViewById(R.id.product_name);
-        textViewDescription= (TextView) findViewById(R.id.tv_product_desc);
-        textStore= (TextView) findViewById(R.id.tv_product_store);
-        textPrice= (TextView) findViewById(R.id.tv_price);
-        textViewSize = (TextView) findViewById(R.id.tv_product_size);
-        textViewunit = (TextView) findViewById(R.id.tv_product_unit);
-        textBrand = (TextView) findViewById(R.id.product_brand);
-        mDatabaeHelper = new DatabaseHandler(this);
+
+
+        mDatabaseHandler = new DatabaseHandler(this);
         cart = new Cart();
         gson = new Gson();
-        BottomNavigationView main_navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        BottomNavigationViewHelper.disableShiftMode(main_navigation);
-        main_navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        main_navigation.clearFocus();
 
+        recyclerView = (RecyclerView) findViewById(R.id.product_recycler);
+        layoutManager = new LinearLayoutManager(activity);
+        recyclerView.setLayoutManager(layoutManager);
+        productList = new ArrayList<>();
 
 
 
@@ -143,61 +113,31 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String sharedPreferencesString = sharedPreferences.getString(Config.STORE_SHARED_PREF, "");
         who = sharedPreferences.getString(Config.WHO, "");
-        storeBarcode = gson.fromJson(sharedPreferencesString, Store.class);
-
-
-
-        action_navigation = (BottomNavigationView) findViewById(R.id.main_action_navigation);
-        BottomNavigationViewHelper.disableShiftMode(action_navigation);
-        action_navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
 
 
-
-        //If the device were rotated then restore information
-        if(savedInstanceState != null){
-            qrcode = savedInstanceState.getString(STATE_QRCODE);
-            qrcodeFormat = savedInstanceState.getString(STATE_QRCODEFORMAT);
-            if(qrcode.equals("")){
-
-            } else {
-                String json = qrcode;
-                product = gson.fromJson(json, Product.class);
-
-                if(product.getStore().getStoreId()==storeBarcode.getStoreId()  && product.getStore().getStoreName().equalsIgnoreCase(storeBarcode.getStoreName())) {
-                    cardView.setVisibility(View.VISIBLE);
-
-                    textViewName.setText(product.getProductName());
-
-//                    textViewDescription.setText(product.getProductDescription());
-
-//                    textPrice.setText(String.valueOf(product.getProductTotalPrice()));
-
-                    textViewSize.setText(product.getProductSize());
-                    textViewunit.setText(product.getProductUnit());
-
-                    textBrand.setText(product.getProductBrand());
-
-                    textStore.setText(product.getStore().getStoreName());
-
-                    mTvInformation.setVisibility(View.GONE);
-                    action_navigation.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    Toast.makeText(activity, "This product belongs to another store", Toast.LENGTH_SHORT).show();
-                }
+        adapter = new CustomProductForCustomerAdapter(productList,activity,new MyAdapterListener()
+        {
+            @Override
+            public void buttonViewOnClick(View v, final int position) {
+                Product product1 = productList.get(position);
+                addCart(product1);
             }
 
-        } else {
-            //Autostart Scanner if activated
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String auto_scan = prefs.getString("pref_auto_scan", "");
-            if(auto_scan.equals("true")){
-                zxingScan();
+            @Override
+            public void imageViewOnClick(View v, int position) {
+                Product product1 = productList.get(position);
+
+
+                Intent intent = new Intent(activity,ProductDescription.class);
+                startActivity(intent);
             }
-        }
+        });
+        recyclerView.setAdapter(adapter);
+
+
+
 
 
     }
@@ -211,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         MenuItem itemCart = menu.findItem(R.id.cart);
 
          icon = (LayerDrawable) itemCart.getIcon();
-       int i =  mDatabaeHelper.fnGetCartCount(storeBarcode);
+       int i =  mDatabaseHandler.fnGetCartCount(storeBarcode);
         setBadgeCount(activity, icon, String.valueOf(i));
         return true;
     }
@@ -238,82 +178,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * This method handles the results of the scan
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null){
-            if(result.getContents()==null){
-                Toast.makeText(this, getResources().getText(R.string.error_canceled_scan), Toast.LENGTH_LONG).show();
-            } else {
-                qrcodeFormat = result.getFormatName();
-                qrcode = result.getContents();
-                if(!qrcode.equals("")){
-                    try {
-                        String json = qrcode;
-                        product = gson.fromJson(json, Product.class);
 
-                        if (product.getStore().getStoreId() == storeBarcode.getStoreId() && product.getStore().getStoreName().equalsIgnoreCase(storeBarcode.getStoreName())) {
-                            cardView.setVisibility(View.VISIBLE);
 
-                            textViewName.setText(product.getProductName());
 
-//                            textViewDescription.setText(product.getProductDescription());
 
-//                            textPrice.setText(String.valueOf(product.getProductTotalPrice()));
 
-                            textViewSize.setText(product.getProductSize());
-                            textViewunit.setText(product.getProductUnit());
-
-                            textBrand.setText(product.getProductBrand());
-
-                            textStore.setText(product.getStore().getStoreName());
-
-                            mTvInformation.setVisibility(View.GONE);
-                            action_navigation.setVisibility(View.VISIBLE);
-                        } else {
-                            Toast.makeText(activity, "This product belongs to another store", Toast.LENGTH_SHORT).show();
-                        }
-                    }catch (Exception e)
-                    {
-                        Toast.makeText(activity, "Invalid QR Code. Please try again..", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    /**
-     * This method handles the communication to the ZXING API -> Apache License 2.0
-     * For more information please check out the link below.
-     *
-     * http://www.apache.org/licenses/LICENSE-2.0
-     */
-    public void zxingScan(){
-        IntentIntegrator integrator = new IntentIntegrator(activity);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-        integrator.setPrompt((String) getResources().getText(R.string.xzing_label));
-        integrator.setCameraId(0);
-        integrator.setBeepEnabled(false);
-        integrator.setBarcodeImageEnabled(false);
-        integrator.initiateScan();
-    }
-
-    /**
-     * Takes the scanned code hands over the code to the method addData in the DatabaseHelper
-     * @param newCode = scanned qr-code/barcode
-     */
-    public void addToDatabase(String newCode){
-//        boolean insertData = mDatabaeHelper.addData(newCode);
-//        if(!insertData){
-//            Toast.makeText(this, getResources().getText(R.string.error_add_to_database), Toast.LENGTH_LONG).show();
-//        }
-    }
 
     private void logout() {
         //Creating an alert dialog to confirm logout
@@ -379,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void addCart()
+    public void addCart(final Product product1)
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = LayoutInflater.from(activity);
@@ -390,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView unit = (TextView) dialogView.findViewById(R.id.unit);
 
         dialogBuilder.setTitle("Add Quantity");
-        unit.setText(product.getProductUnit());
+        unit.setText(product1.getProductUnit());
         dialogBuilder.setPositiveButton("Add to Cart", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String edtQ =   edt.getText().toString().trim();
@@ -398,30 +267,31 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-//                double multiQ = value * product.getProductTotalPrice();
+                double multiQ = value * product1.getProductTotalPrice();
 
-                product.setProductQuantity(value);
-
-
+                product1.setProductQuantity(value);
 
 
 
 
-//                cart.setProductCartId(product.getProductId());
-                cart.setProductSize(product.getProductSize());
-                cart.setStore(storeBarcode);
-                cart.setProductUnit(product.getProductUnit());
-                cart.setProductBrand(product.getProductBrand());
-                cart.setProductName(product.getProductName());
-//                cart.setProductDescription(product.getProductDescription());
-                cart.setProductQuantity(product.getProductQuantity());
-//                cart.setProductTotalPrice(product.getProductTotalPrice());
+
+
+                cart.setProductId(product1.getProductId());
+                cart.setProductSize(product1.getProductSize());
+                cart.setStore(product1.getStore());
+                cart.setProductUnit(product1.getProductUnit());
+                cart.setProductCategory(product1.getProductCategory());
+                cart.setProductSubCategory(product1.getProductSubCategory());
+                cart.setProductName(product1.getProductName());
+                cart.setProductArea(product1.getProductArea());
+                cart.setProductQuantity(product1.getProductQuantity());
+                cart.setProductTotalPrice(product1.getProductTotalPrice());
 
 
 
-                mDatabaeHelper.addToCart(cart);
+                mDatabaseHandler.addToCart(cart);
 
-                int i =  mDatabaeHelper.fnGetCartCount(storeBarcode);
+                int i =  mDatabaseHandler.fnGetCartCount(storeBarcode);
                 setBadgeCount(activity, icon, String.valueOf(i));
 
 

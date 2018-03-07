@@ -63,7 +63,7 @@ public class CustomcheckOut extends RecyclerView.Adapter<CustomcheckOut.ViewHold
         holder.textViewName.setText(product.getProductName());
 
         holder.tvUnit.setText(" "+product.getProductUnit());
-        holder.textViewBrand.setText(product.getProductBrand());
+//        holder.textViewBrand.setText(product.getProductBrand());
 
         int value = product.getProductQuantity();
 

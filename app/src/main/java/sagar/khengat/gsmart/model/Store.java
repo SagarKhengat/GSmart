@@ -14,7 +14,8 @@ public class Store implements Parcelable{
     private String storeName;
     @DatabaseField(canBeNull = true,generatedId = true)
     private Integer storeId;
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign=true, foreignAutoRefresh=true, canBeNull=true,
+            maxForeignAutoRefreshLevel=3)
     private Area area;
 
 

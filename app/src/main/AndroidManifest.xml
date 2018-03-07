@@ -78,7 +78,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activities.SelectCategory"></activity>
+        <activity android:name=".activities.SelectCategory" />
+        <activity android:name=".activities.ProductDescription"></activity>
     </application>
 
 </manifest>

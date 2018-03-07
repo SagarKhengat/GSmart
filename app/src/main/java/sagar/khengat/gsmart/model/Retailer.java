@@ -17,7 +17,8 @@ public class Retailer implements Parcelable {
     private String storeName;
     @DatabaseField(canBeNull = true)
     private String password;
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign=true, foreignAutoRefresh=true, canBeNull=true,
+            maxForeignAutoRefreshLevel=3)
     private Area area;
     @DatabaseField(canBeNull = true)
     private String storeAddress;

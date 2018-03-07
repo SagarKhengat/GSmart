@@ -100,6 +100,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
     Bitmap bitmap = null;
     Category category;
     SubCategory subCategory;
+    Area area;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,10 +146,12 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
         gson = new Gson();
         store = new Store();
         product = new Product();
+        area = new Area();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String json = sharedPreferences.getString(Config.USER, "");
         retailer = gson.fromJson(json,Retailer.class);
         store = mDatabaseHandler.getStore(retailer.getStoreName());
+        area = retailer.getArea();
 
         textInputEditTextProductStore.setText(store.getStoreName());
         textInputEditTextProductStore.setClickable(false);
@@ -462,6 +465,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
                         product.setStore(store);
                         product.setProductCategory(category);
                         product.setProductSubCategory(subCategory);
+                        product.setProductArea(area);
 
 
 

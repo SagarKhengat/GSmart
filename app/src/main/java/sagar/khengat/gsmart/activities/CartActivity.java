@@ -217,7 +217,7 @@ public class CartActivity extends AppCompatActivity {
                             history.setProductSize(product.getProductSize());
                             history.setStore(storeBarcode);
                             history.setProductUnit(product.getProductUnit());
-                            history.setProductBrand(product.getProductBrand());
+//                            history.setProductBrand(product.getProductBrand());
                             history.setProductName(product.getProductName());
 //                            history.setProductDescription(product.getProductDescription());
                             history.setProductQuantity(product.getProductQuantity());

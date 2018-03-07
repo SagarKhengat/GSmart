@@ -10,15 +10,24 @@ public class Product implements Parcelable{
     @DatabaseField(canBeNull = true)
 
     private String productName;
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign=true, foreignAutoRefresh=true, canBeNull=true,
+            maxForeignAutoRefreshLevel=3)
 
     private Category productCategory;
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign=true, foreignAutoRefresh=true, canBeNull=true,
+            maxForeignAutoRefreshLevel=3)
     private Store store;
 
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign=true, foreignAutoRefresh=true, canBeNull=true,
+            maxForeignAutoRefreshLevel=3)
 
     private SubCategory productSubCategory;
+
+    @DatabaseField(foreign=true, foreignAutoRefresh=true, canBeNull=true,
+            maxForeignAutoRefreshLevel=3)
+
+    private Area productArea;
+
     @DatabaseField(canBeNull = true)
 
     private String productUnit;
@@ -32,9 +41,7 @@ public class Product implements Parcelable{
     @DatabaseField(canBeNull = true)
 
     private String productSize;
-    @DatabaseField(canBeNull = true)
 
-    private String productBrand;
 
     @DatabaseField(canBeNull = true)
 
@@ -47,6 +54,31 @@ public class Product implements Parcelable{
     @DatabaseField(canBeNull = true)
 
     private int productQuantity;
+
+
+    @DatabaseField(canBeNull = true)
+
+
+    private double productTotalPrice;
+
+
+    public Area getProductArea() {
+        return productArea;
+    }
+
+    public void setProductArea(Area productArea) {
+        this.productArea = productArea;
+    }
+
+    public double getProductTotalPrice() {
+        return productTotalPrice;
+    }
+
+    public void setProductTotalPrice(double productToatalPrice) {
+        this.productTotalPrice = productToatalPrice;
+    }
+
+
 
 
     public double getProductGstPrice() {
@@ -125,13 +157,6 @@ public class Product implements Parcelable{
         this.productId = productId;
     }
 
-    public String getProductBrand() {
-        return productBrand;
-    }
-
-    public void setProductBrand(String productBrand) {
-        this.productBrand = productBrand;
-    }
 
     public String getProductSize() {
         return productSize;
@@ -153,9 +178,11 @@ public class Product implements Parcelable{
         dest.writeString(productSize);
         dest.writeDouble(productOriginalPrice);
         dest.writeDouble(productGstPrice);
+        dest.writeDouble(productTotalPrice);
         dest.writeString(productName);
-        dest.writeString(productBrand);
+
         dest.writeValue(productCategory);
+        dest.writeValue(productArea);
         dest.writeString(productUnit);
         dest.writeValue(productSubCategory);
         dest.writeValue(store);
@@ -175,13 +202,15 @@ public class Product implements Parcelable{
         productId = in.readString();
         productName = in.readString();
         store = (Store) in.readValue(Product.class.getClassLoader());
-        productBrand =in.readString();
+
         productCategory = (Category) in.readValue(Product.class.getClassLoader());
         productSubCategory = (SubCategory) in.readValue(Product.class.getClassLoader());
+        productArea = (Area) in.readValue(Product.class.getClassLoader());
         productQuantity = in.readInt();
         productSize = in.readString();
         productUnit = in.readString();
         productOriginalPrice = in.readDouble();
+        productTotalPrice = in.readDouble();
         productGstPrice = in.readDouble();
     }
 
@@ -197,11 +226,12 @@ public class Product implements Parcelable{
                 ", productCategory='" + productCategory + '\'' +
                 ", productUnit='" + productUnit + '\'' +
                 ", productId=" + productId +
+                ", productArea=" + productArea +
                 ", productSize='" + productSize + '\'' +
-                ", productBrand='" + productBrand + '\'' +
                 ", productOriginalPrice=" + productOriginalPrice +
                 ", productGstPrice=" + productGstPrice +
                 ", productQuantity=" + productQuantity +
+                ", productTotalPrice=" + productTotalPrice +
                 '}';
     }
 }

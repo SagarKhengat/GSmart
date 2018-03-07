@@ -15,7 +15,8 @@ public class SubCategory implements Parcelable {
 
     @DatabaseField(canBeNull = true, generatedId = true)
     private Integer subCategoryId;
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign=true, foreignAutoRefresh=true, canBeNull=true,
+            maxForeignAutoRefreshLevel=3)
     private Category category;
 
     public String getSubCategoryName() {
