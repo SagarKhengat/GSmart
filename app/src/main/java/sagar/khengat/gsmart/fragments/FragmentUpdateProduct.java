@@ -50,7 +50,7 @@ public class FragmentUpdateProduct extends Fragment implements View.OnClickListe
 
     private TextInputEditText textInputEditTextProductName;
 
-
+        ImageView imageView;
     private TextInputEditText textInputEditTextProductOriginalPrice;
     private TextInputEditText textInputEditTextProductGstPrice;
     private TextInputEditText textInputEditTextProductUnit;
@@ -88,7 +88,7 @@ public class FragmentUpdateProduct extends Fragment implements View.OnClickListe
         mDatabaseHandler = new DatabaseHandler(getActivity());
 
         textInputLayoutProductName = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductName);
-
+        imageView = (ImageView)view.findViewById(R.id.image);
 
         textInputLayoutProductOriginalPrice = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductOriginalPrice);
         textInputLayoutProductGstPrice = (TextInputLayout) view.findViewById(R.id.textInputLayoutProductGstPrice);
@@ -116,27 +116,15 @@ public class FragmentUpdateProduct extends Fragment implements View.OnClickListe
         store = mDatabaseHandler.getStore(retailer.getStoreName());
         List<Product> categories = mDatabaseHandler.fnGetAllProductInStore(store);
         if (categories.isEmpty()) {
-//LinearLayOut Setup
-            LinearLayout linearLayout= new LinearLayout(getActivity());
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT));
-
-//ImageView Setup
-            ImageView imageView = new ImageView(getActivity());
-
-//setting image resource
-            imageView.setImageResource(R.drawable.empty_cart);
-
-//setting image position
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
-
-//adding view to layout
-            linearLayout.addView(imageView);
-//make visible to program
-            getActivity().setContentView(linearLayout);
+            imageView.setVisibility(View.VISIBLE);
+            spinnerProduct.setVisibility(View.GONE);
+            appCompatButtonView.setVisibility(View.GONE);
+        }
+        else
+        {
+            imageView.setVisibility(View.GONE);
+            spinnerProduct.setVisibility(View.VISIBLE);
+            appCompatButtonView.setVisibility(View.VISIBLE);
         }
         appCompatButtonView.setOnClickListener(this);
         appCompatButtonupdate.setOnClickListener(this);

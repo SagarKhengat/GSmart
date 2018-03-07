@@ -6,7 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="sagar.khengat.gsmart.activities.MainActivityForRetailer">
-
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="358dp"
+        android:src="@drawable/no_product"
+        android:visibility="gone"
+         />
     <Spinner
         android:id="@+id/spinnerProductId"
         android:layout_width="match_parent"

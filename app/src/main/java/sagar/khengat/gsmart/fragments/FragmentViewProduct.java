@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 
@@ -39,7 +40,7 @@ public class FragmentViewProduct extends Fragment {
     Gson gson;
     Retailer retailer;
     Store store;
-
+    ImageView imageView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class FragmentViewProduct extends Fragment {
         view = inflater.inflate(R.layout.fragment_view_product, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.product_recycler);
         layoutManager = new LinearLayoutManager(getActivity());
+        imageView = (ImageView)view.findViewById(R.id.image);
         recyclerView.setLayoutManager(layoutManager);
         productList = new ArrayList<>();
         mDatabaseHandler = new DatabaseHandler(getActivity());
@@ -64,6 +66,13 @@ public class FragmentViewProduct extends Fragment {
         retailer = gson.fromJson(json,Retailer.class);
         store = mDatabaseHandler.getStore(retailer.getStoreName());
         productList = mDatabaseHandler.fnGetAllProductInStore(store);
+        if (productList.isEmpty()) {
+            imageView.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            imageView.setVisibility(View.GONE);
+        }
         adapter = new CustomProduct(productList, getActivity(),new MyAdapterListener()
         {
             @Override
