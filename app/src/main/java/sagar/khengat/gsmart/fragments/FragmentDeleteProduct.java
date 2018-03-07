@@ -2,17 +2,22 @@ package sagar.khengat.gsmart.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -24,6 +29,7 @@ import java.util.List;
 import sagar.khengat.gsmart.Adapters.SpinnerProductAdapter;
 import sagar.khengat.gsmart.Constants.Config;
 import sagar.khengat.gsmart.R;
+import sagar.khengat.gsmart.activities.MainActivityForRetailer;
 import sagar.khengat.gsmart.model.Product;
 import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.model.Store;
@@ -63,7 +69,8 @@ public class FragmentDeleteProduct extends Fragment implements View.OnClickListe
     private SpinnerProductAdapter productAdapter;
     Store store;
     Product product;
-
+    public static FragmentManager manager;
+    public static FragmentTransaction ft;
     View view;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +100,7 @@ public class FragmentDeleteProduct extends Fragment implements View.OnClickListe
         textInputLayoutProductSize= (TextInputLayout) view.findViewById(R.id.textInputLayoutProductQuantity);
 
         textInputEditTextProductName = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductName);
-
+        scrollView = (ScrollView)view.findViewById(R.id.scrollView);
 
 
         textInputEditTextProductOriginalPrice = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductOriginalPrice);
@@ -110,6 +117,30 @@ public class FragmentDeleteProduct extends Fragment implements View.OnClickListe
         retailer = gson.fromJson(json,Retailer.class);
         store = mDatabaseHandler.getStore(retailer.getStoreName());
 
+        List<Product> categories = mDatabaseHandler.fnGetAllProductInStore(store);
+        if (categories.isEmpty()) {
+//LinearLayOut Setup
+            LinearLayout linearLayout= new LinearLayout(getActivity());
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT));
+
+//ImageView Setup
+            ImageView imageView = new ImageView(getActivity());
+
+//setting image resource
+            imageView.setImageResource(R.drawable.empty_cart);
+
+//setting image position
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+//adding view to layout
+            linearLayout.addView(imageView);
+//make visible to program
+            getActivity().setContentView(linearLayout);
+        }
         appCompatButtonView.setOnClickListener(this);
         appCompatButtonupdate.setOnClickListener(this);
         product = new Product();
@@ -152,19 +183,26 @@ public class FragmentDeleteProduct extends Fragment implements View.OnClickListe
 
 
 
-                        Toast.makeText(getActivity(), "Product updated successFully", Toast.LENGTH_LONG).show();
-
+                        Toast.makeText(getActivity(), "Product Deleted successFully", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(getActivity(), MainActivityForRetailer.class));
+                        getActivity().finish();
                     } catch (Exception e){
                         Toast.makeText(getActivity(), getResources().getText(R.string.error_generate), Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
             case R.id.appCompatButtonView:
+                scrollView.setVisibility(View.VISIBLE);
                 textInputEditTextProductName.setText(product.getProductName());
+                textInputEditTextProductName.setEnabled(false);
                 textInputEditTextProductOriginalPrice.setText(String.valueOf(product.getProductOriginalPrice()));
+                textInputEditTextProductOriginalPrice.setEnabled(false);
                 textInputEditTextProductGstPrice.setText(String.valueOf(product.getProductGstPrice()));
+                textInputEditTextProductGstPrice.setEnabled(false);
                 textInputEditTextProductSize.setText(product.getProductSize());
+                textInputEditTextProductSize.setEnabled(false);
                 textInputEditTextProductUnit.setText(product.getProductUnit());
+                textInputEditTextProductUnit.setEnabled(false);
                 break;
         }
     }
@@ -185,6 +223,17 @@ public class FragmentDeleteProduct extends Fragment implements View.OnClickListe
 
         // attaching data adapter to spinner
         spinnerProduct.setAdapter(productAdapter);
+    }
+    private void setUpFragment(Fragment fragment ) {
+        Bundle bundle = new Bundle();
+
+        manager = getActivity().getSupportFragmentManager();
+        ft = manager.beginTransaction();
+        ft.replace(android.R.id.tabcontent, fragment,"Fragment_tag");
+        fragment.setArguments(bundle);
+        ft.addToBackStack(null);
+        ft.commit();
+
     }
 
 }

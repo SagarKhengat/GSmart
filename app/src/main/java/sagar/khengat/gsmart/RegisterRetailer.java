@@ -26,7 +26,7 @@ import sagar.khengat.gsmart.model.Store;
 import sagar.khengat.gsmart.util.DatabaseHandler;
 import sagar.khengat.gsmart.util.InputValidation;
 
-public class RegisterRetailer extends AppCompatActivity  implements Spinner.OnItemSelectedListener, View.OnClickListener {
+public class RegisterRetailer extends AppCompatActivity  implements View.OnClickListener {
     private final AppCompatActivity activity = RegisterRetailer.this;
     private NestedScrollView nestedScrollView;
 
@@ -85,10 +85,24 @@ public class RegisterRetailer extends AppCompatActivity  implements Spinner.OnIt
         textInputEditTextShopName = (TextInputEditText) findViewById(R.id.textInputEditTextShopName);
         textInputEditTextShopAddress = (TextInputEditText) findViewById(R.id.textInputEditTextShopAddress);
         store = new Store();
+        area = new Area();
         spinnerArea = (Spinner)findViewById(R.id.spinnerArea);
         appCompatButtonRegister = (AppCompatButton) findViewById(R.id.appCompatButtonRegister);
 
         appCompatTextViewLoginLink = (AppCompatTextView) findViewById(R.id.appCompatTextViewLoginLink);
+
+        spinnerArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Area area1 = areaAdapter.getItem(position);
+                area=area1;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
     }
 
@@ -163,7 +177,7 @@ public class RegisterRetailer extends AppCompatActivity  implements Spinner.OnIt
             return;
         }
 
-        if (!databaseHelper.checkRetailer(textInputEditTextName.getText().toString().trim())) {
+        if (!databaseHelper.checkRetailerWithNumber(textInputEditTextName.getText().toString().trim(),textInputEditTextContact.getText().toString().trim())) {
             if(!databaseHelper.checkStore(textInputEditTextShopName.getText().toString().trim())) {
                 String storeName = textInputEditTextShopName.getText().toString();
                 store.setStoreName(storeName);
@@ -191,7 +205,7 @@ public class RegisterRetailer extends AppCompatActivity  implements Spinner.OnIt
             }
         } else {
             // Snack Bar to show error message that record already exists
-            Toast.makeText(activity, "Username already exists..please try again", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "Username or Mobile already exists..please try again", Toast.LENGTH_LONG).show();
         }
 
 
@@ -208,15 +222,7 @@ public class RegisterRetailer extends AppCompatActivity  implements Spinner.OnIt
         textInputEditTextConfirmPassword.setText(null);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        area = areaAdapter.getItem(position);
-    }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     private void loadSpinnerArea() {
         // database handler

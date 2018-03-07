@@ -460,7 +460,14 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
                 }
                 else
                 {
-                    product.setProductId(textInputEditTextProductId.getText().toString().trim());
+                    if(mDatabaseHandler.checkProduct(textInputEditTextProductId.getText().toString().trim()))
+                    {
+                        Toast.makeText(getActivity(), "Product Id exist please try again..", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+
+                        product.setProductId(textInputEditTextProductId.getText().toString().trim());
+                    }
                 }
                         product.setStore(store);
                         product.setProductCategory(category);

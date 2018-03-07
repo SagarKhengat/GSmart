@@ -128,6 +128,33 @@ public class DatabaseHandler {
 	 * @param email
 	 * @return true/false
 	 */
+	public boolean checkRetailerWithNumber(String email, String number) {
+		boolean b = false;
+		List <Retailer> mListAllStores = fnGetAllRetailer();
+		try {
+			QueryBuilder < Retailer, Integer > qb = retailerDao.queryBuilder();
+
+			for (Retailer user:
+					mListAllStores) {
+
+				if (user.getName().equals(email) && user.getMobno().equals(number))
+				{
+					b = true;
+				}
+				else
+				{
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return b;
+	}
+
 	public boolean checkRetailer(String email) {
 		boolean b = false;
 		List <Retailer> mListAllStores = fnGetAllRetailer();
@@ -154,6 +181,7 @@ public class DatabaseHandler {
 		}
 		return b;
 	}
+
 
 	public boolean checkStore(String email) {
 		boolean b = false;
@@ -302,17 +330,17 @@ public class DatabaseHandler {
 		return b;
 	}
 
-	public boolean checkRetailerContactNo(String username, String contactno) {
+	public boolean checkProduct(String username) {
 
 		boolean b = false;
-		List <Retailer> mListAllStores = fnGetAllRetailer();
+		List <Product> mListAllStores = fnGetAllProduct();
 		try {
-			QueryBuilder < Retailer, Integer > qb = retailerDao.queryBuilder();
+			QueryBuilder < Product, Integer > qb = productDao.queryBuilder();
 
-			for (Retailer user:
+			for (Product user:
 					mListAllStores) {
 
-				if (user.getName().equals(username) && user.getMobno().equals(contactno))
+				if (user.getProductId().equals(username))
 				{
 					b = true;
 				}

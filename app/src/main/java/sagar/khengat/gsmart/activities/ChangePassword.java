@@ -32,7 +32,7 @@ public class ChangePassword extends AppCompatActivity {
         setContentView(R.layout.activity_change_password);
         etxPassword =(EditText)findViewById(R.id.password);
         etxConfirmPassword = (EditText) findViewById(R.id.confirmpassword);
-        etxCurrentPassword = (EditText) findViewById(R.id.current_password);
+        etxCurrentPassword = (EditText) findViewById(R.id.mobile);
         etxCurrentEmail = (EditText) findViewById(R.id.current_email);
         btnSubmit = (Button) findViewById(R.id.submit);
         databaseHelper = new DatabaseHandler(activity);
@@ -118,20 +118,17 @@ public class ChangePassword extends AppCompatActivity {
                 Toast.makeText(activity, getString(R.string.error_email_not_exists), Toast.LENGTH_LONG).show();
             }
         } else {
-            if (databaseHelper.checkRetailer(etxCurrentEmail.getText().toString().trim())) {
-                if (databaseHelper.checkRetailer(etxCurrentEmail.getText().toString().trim(), etxCurrentPassword.getText().toString().trim())) {
+            if (databaseHelper.checkRetailerWithNumber(etxCurrentEmail.getText().toString().trim(),etxCurrentPassword.getText().toString().trim())) {
+
                     databaseHelper.updateRetailerPassword(etxCurrentEmail.getText().toString(), password);
 
 
                 } else {
                     // Snack Bar to show error message that record already exists
-                    Toast.makeText(activity, getString(R.string.error_password_not_exists), Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Wrong Info Entered..Please try again..", Toast.LENGTH_LONG).show();
                 }
 
-            } else {
-                // Snack Bar to show error message that record already exists
-                Toast.makeText(activity, getString(R.string.error_email_not_exists), Toast.LENGTH_LONG).show();
-            }
+
         }
 
     }

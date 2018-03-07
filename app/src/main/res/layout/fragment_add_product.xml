@@ -22,7 +22,7 @@
                     android:id="@+id/textInputLayoutProductId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp">
+                    android:layout_marginTop="20dp">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/textInputEditTextProductId"
@@ -57,7 +57,7 @@
                     android:id="@+id/textInputLayoutProductQuantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp">
+                    android:layout_marginTop="20dp">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/textInputEditTextProductQuantity"
@@ -73,7 +73,7 @@
                     android:id="@+id/spinnerCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="20dp"
                     android:fontFamily="sans-serif-light"
                     android:paddingLeft="5dp"
                     android:textSize="20sp" />
@@ -83,7 +83,7 @@
                     android:id="@+id/spinnerSubCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="20dp"
                     android:fontFamily="sans-serif-light"
                     android:paddingLeft="5dp"
                     android:textSize="20sp" />

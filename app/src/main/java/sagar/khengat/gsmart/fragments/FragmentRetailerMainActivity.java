@@ -86,8 +86,9 @@ public class FragmentRetailerMainActivity extends Fragment implements View.OnCli
 
         manager = getActivity().getSupportFragmentManager();
         ft = manager.beginTransaction();
-        ft.replace(android.R.id.tabcontent, fragment);
+        ft.replace(android.R.id.tabcontent, fragment,"Fragment_tag");
         fragment.setArguments(bundle);
+        ft.addToBackStack(null);
         ft.commit();
 
     }

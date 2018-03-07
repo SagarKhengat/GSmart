@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,7 +30,8 @@ public class MainActivityForRetailer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_for_retailer);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         setUpFragment(new FragmentRetailerMainActivity());
     }
 
@@ -58,6 +60,9 @@ public class MainActivityForRetailer extends AppCompatActivity {
 
             case R.id.logout:
                 logout();
+                return true;
+            case android.R.id.home:
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -111,4 +116,12 @@ public class MainActivityForRetailer extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            finish();
+        }
+    }
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="40dp"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     tools:context="sagar.khengat.gsmart.activities.MainActivityForRetailer">
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewLinkWelcome"
@@ -14,38 +14,49 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="25dp"
-        android:gravity="center"
-        android:text=""
-        android:textSize="16dp" />
+        android:gravity="center_vertical"
+        android:text="Hello"
+        android:typeface="serif"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:textSize="20dp" />
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/appCompatButtonAddProduct"
-        android:layout_width="wrap_content"
+        android:layout_width="155dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="25dp"
         android:background="@color/colorTextHint"
         android:text="Add Product"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp" />
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/appCompatButtonViewProduct"
-        android:layout_width="wrap_content"
+        android:layout_width="155dp"
         android:layout_height="wrap_content"
         android:background="@color/colorTextHint"
         android:text="View Product"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="25dp"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp" />
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/appCompatButtonUpdateProduct"
-        android:layout_width="wrap_content"
+        android:layout_width="155dp"
         android:layout_height="wrap_content"
         android:background="@color/colorTextHint"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="25dp"
         android:text="Update Product"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp" />
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/appCompatButtonDeleteProduct"
-        android:layout_width="wrap_content"
+        android:layout_width="155dp"
         android:layout_height="wrap_content"
         android:background="@color/colorTextHint"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="25dp"
         android:text="Delete Product"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp" />

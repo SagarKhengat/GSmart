@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -96,7 +98,7 @@ public class FragmentUpdateProduct extends Fragment implements View.OnClickListe
         textInputLayoutProductSize= (TextInputLayout) view.findViewById(R.id.textInputLayoutProductQuantity);
 
         textInputEditTextProductName = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductName);
-
+        scrollView = (ScrollView)view.findViewById(R.id.scrollView);
 
 
         textInputEditTextProductOriginalPrice = (TextInputEditText) view.findViewById(R.id.textInputEditTextProductOriginalPrice);
@@ -112,7 +114,30 @@ public class FragmentUpdateProduct extends Fragment implements View.OnClickListe
         String json = sharedPreferences.getString(Config.USER, "");
         retailer = gson.fromJson(json,Retailer.class);
         store = mDatabaseHandler.getStore(retailer.getStoreName());
+        List<Product> categories = mDatabaseHandler.fnGetAllProductInStore(store);
+        if (categories.isEmpty()) {
+//LinearLayOut Setup
+            LinearLayout linearLayout= new LinearLayout(getActivity());
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
 
+            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT));
+
+//ImageView Setup
+            ImageView imageView = new ImageView(getActivity());
+
+//setting image resource
+            imageView.setImageResource(R.drawable.empty_cart);
+
+//setting image position
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+//adding view to layout
+            linearLayout.addView(imageView);
+//make visible to program
+            getActivity().setContentView(linearLayout);
+        }
         appCompatButtonView.setOnClickListener(this);
         appCompatButtonupdate.setOnClickListener(this);
         product = new Product();
@@ -169,13 +194,14 @@ public class FragmentUpdateProduct extends Fragment implements View.OnClickListe
 
 
                         Toast.makeText(getActivity(), "Product updated successFully", Toast.LENGTH_LONG).show();
-
+                        scrollView.setVisibility(View.GONE);
                     } catch (Exception e){
                         Toast.makeText(getActivity(), getResources().getText(R.string.error_generate), Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
             case R.id.appCompatButtonView:
+                scrollView.setVisibility(View.VISIBLE);
                 textInputEditTextProductName.setText(product.getProductName());
                 textInputEditTextProductOriginalPrice.setText(String.valueOf(product.getProductOriginalPrice()));
                 textInputEditTextProductGstPrice.setText(String.valueOf(product.getProductGstPrice()));
