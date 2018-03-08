@@ -18,7 +18,7 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="358dp"
-        android:src="@drawable/no_product"
+        android:src="@drawable/empty_cart"
         android:visibility="gone"
         android:layout_weight="0.91" />
     </RelativeLayout>

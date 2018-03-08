@@ -79,7 +79,7 @@
                 android:id="@+id/textInputEditTextContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="numberDecimal"
                 android:hint="Mobile No."
                 android:maxLines="1"
                 android:textColor="@android:color/background_dark" />

@@ -2,6 +2,7 @@ package sagar.khengat.gsmart.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ import sagar.khengat.gsmart.Adapters.SpinnerStoreAdapter;
 import sagar.khengat.gsmart.Adapters.SpinnerSubCategoryAdapter;
 import sagar.khengat.gsmart.Constants.Config;
 import sagar.khengat.gsmart.R;
+import sagar.khengat.gsmart.StoreListing;
 import sagar.khengat.gsmart.model.Area;
 import sagar.khengat.gsmart.model.Category;
 import sagar.khengat.gsmart.model.Store;
@@ -111,7 +113,10 @@ public class SelectCategory extends AppCompatActivity {
         fabGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(activity, StoreListing.class);
+                intent.putExtra("category", category);
+                intent.putExtra("subCategory",subCategory);
+                startActivity(intent);
             }
         });
 

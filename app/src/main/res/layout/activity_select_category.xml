@@ -12,7 +12,7 @@
     <TextView
         android:id="@+id/txtArea"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="55dp"
         android:layout_weight="0.00"
         android:text="Select Category"
         android:textSize="30sp"
@@ -39,7 +39,7 @@
     <TextView
         android:id="@+id/txtStore"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="55dp"
         android:layout_weight="0.00"
         android:text="Select SubCategory"
         android:textSize="30sp"

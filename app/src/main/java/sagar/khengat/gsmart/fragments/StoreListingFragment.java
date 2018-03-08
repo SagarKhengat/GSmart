@@ -26,7 +26,9 @@ import sagar.khengat.gsmart.Constants.Config;
 import sagar.khengat.gsmart.R;
 import sagar.khengat.gsmart.activities.MainActivity;
 import sagar.khengat.gsmart.model.Area;
+import sagar.khengat.gsmart.model.Category;
 import sagar.khengat.gsmart.model.Store;
+import sagar.khengat.gsmart.model.SubCategory;
 import sagar.khengat.gsmart.util.DatabaseHandler;
 
 
@@ -48,8 +50,10 @@ public class StoreListingFragment extends Fragment {
     public static FragmentTransaction ft;
     Spinner spinnerStore;
     Spinner spinnerArea;
-    FloatingActionButton fabArea;
-    FloatingActionButton fabStore;
+    Area area;
+    Category category;
+    SubCategory subCategory;
+
     FloatingActionButton fabGo;
     private SpinnerAreaAdapter areaAdapter;
     private SpinnerStoreAdapter storeAdapter;
@@ -84,57 +88,47 @@ public class StoreListingFragment extends Fragment {
         mTextGo = (TextView) view.findViewById(R.id.txtgo);
         spinnerArea = (Spinner) view.findViewById(R.id.spinnerArea);
         spinnerStore = (Spinner) view.findViewById(R.id.spinnerStore);
-        fabStore = (FloatingActionButton) view.findViewById(R.id.fabStore);
-        fabArea = (FloatingActionButton) view.findViewById(R.id.fabArea);
+            area = new Area();
+        category = new Category();
+        subCategory = new SubCategory();
+        store = new Store();
         fabGo = (FloatingActionButton) view.findViewById(R.id.fabGo);
-
+         category =  (Category) getActivity().getIntent().getSerializableExtra("category");
+         subCategory =  (SubCategory) getActivity().getIntent().getSerializableExtra("subCategory");
 
         if(mDatabaeHelper.fnGetAllArea().size()==0 && who.equals(Config.RETAILER))
         {
-            mTextArea.setText("Please Add Area First");
-            fabArea.setVisibility(View.VISIBLE);
-            spinnerArea.setVisibility(View.GONE);
-        }
-        else
-        {
-            mTextArea.setText("No Area added");
-            fabArea.setVisibility(View.GONE);
+
             spinnerArea.setVisibility(View.GONE);
             fabGo.setVisibility(View.GONE);
             mTextGo.setVisibility(View.GONE);
+        }
+        else
+        {
+
         }
         if(mDatabaeHelper.fnGetAllArea().size()!=0)
         {
             loadSpinnerArea();
         }
-        if(mDatabaeHelper.fnGetAllStore().size()==0 && who.equals(Config.RETAILER))
-        {
-            mTextStore.setText("Please Add Store First");
-            fabStore.setVisibility(View.VISIBLE);
-            spinnerStore.setVisibility(View.GONE);
-        }
-        else
-        {
-            mTextStore.setText("No Store added");
-            fabStore.setVisibility(View.GONE);
-            spinnerStore.setVisibility(View.GONE);
-            fabGo.setVisibility(View.GONE);
-            mTextGo.setVisibility(View.GONE);
-        }
+
         fabGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mDatabaeHelper.fnGetAllArea().size()!=0 && mDatabaeHelper.fnGetAllStore().size()!=0) {
                     Intent accountsIntent = new Intent(getActivity(), MainActivity.class);
                     accountsIntent.putExtra("store", store);
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                    //Creating editor to store values to shared preferences
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    String saveStore = gson.toJson(store);
-                    //Adding values to editor
-                    editor.putString(Config.STORE_SHARED_PREF, saveStore).apply();
+                    accountsIntent.putExtra("area",area);
+                    accountsIntent.putExtra("category",category);
+                    accountsIntent.putExtra("subCategory",subCategory);
+//                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+//                    //Creating editor to store values to shared preferences
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    String saveStore = gson.toJson(store);
+//                    //Adding values to editor
+//                    editor.putString(Config.STORE_SHARED_PREF, saveStore).apply();
                     startActivity(accountsIntent);
-                    getActivity().finish();
+
                 }
                 else
                 {
@@ -143,30 +137,18 @@ public class StoreListingFragment extends Fragment {
 
             }
         });
-        fabStore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                setUpFragment(new AddStoreorAreaFragment(), "Store");
-            }
-        });
 
-        fabArea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setUpFragment(new AddStoreorAreaFragment(), "Area");
-
-            }
-        });
 
         spinnerArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Area area = areaAdapter.getItem(position);
+                Area area1 = areaAdapter.getItem(position);
+                    area =area1;
 
                 if(mDatabaeHelper.fnGetAllStore().size()!=0)
                 {
-                    loadSpinnerStore(area);
+                    loadSpinnerStore(area1);
                 }
 
             }
@@ -180,9 +162,8 @@ public class StoreListingFragment extends Fragment {
         spinnerStore.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 store = storeAdapter.getItem(position);
-
-                storeName = store.getStoreName();
+                 Store store1 = storeAdapter.getItem(position);
+                    store = store1;
             }
 
             @Override
@@ -236,23 +217,29 @@ public class StoreListingFragment extends Fragment {
         // Spinner Drop down elements
         List<Store> allAreas = mDatabaeHelper.fnGetStoreInArea(area);
 
-        if (allAreas.size()==0)
-        {
-            mTextStore.setText("Please Add Store First");
-            fabStore.setVisibility(View.VISIBLE);
+        if (allAreas.size() == 0) {
+            mTextStore.setText("No Store In This Area");
+
             spinnerStore.setVisibility(View.GONE);
+            fabGo.setVisibility(View.GONE);
+            mTextGo.setVisibility(View.GONE);
+        } else {
+            mTextStore.setText("Select Store");
+
+            spinnerStore.setVisibility(View.VISIBLE);
+            fabGo.setVisibility(View.VISIBLE);
+            mTextGo.setVisibility(View.VISIBLE);
+            // Creating adapter for spinner
+            storeAdapter = new SpinnerStoreAdapter(getActivity(),
+                    android.R.layout.simple_spinner_item,
+                    allAreas);
+
+            // Drop down layout style - list view with radio button
+
+
+            // attaching data adapter to spinner
+            spinnerStore.setAdapter(storeAdapter);
         }
-
-        // Creating adapter for spinner
-        storeAdapter = new SpinnerStoreAdapter(getActivity(),
-                android.R.layout.simple_spinner_item,
-                allAreas);
-
-        // Drop down layout style - list view with radio button
-
-
-        // attaching data adapter to spinner
-        spinnerStore.setAdapter(storeAdapter);
     }
 
 
