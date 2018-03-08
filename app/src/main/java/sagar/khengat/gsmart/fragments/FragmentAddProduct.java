@@ -463,6 +463,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
                     if(mDatabaseHandler.checkProduct(textInputEditTextProductId.getText().toString().trim()))
                     {
                         Toast.makeText(getActivity(), "Product Id exist please try again..", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                     else {
 
@@ -588,8 +589,7 @@ public void saveImageToSDCard(Bitmap bitmap,String name,String areaName) {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
         out.flush();
         out.close();
-        Toast.makeText(getContext(),"Product image Saved successfully..",
-        Toast.LENGTH_LONG).show();
+
             try
             {
                 DeleteRecursive(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES));
@@ -601,8 +601,7 @@ public void saveImageToSDCard(Bitmap bitmap,String name,String areaName) {
 
         } catch (Exception e) {
         e.printStackTrace();
-        Toast.makeText(getContext(),"Sorry! Failed to save Image...!!!",
-        Toast.LENGTH_LONG).show();
+
         }
         }
     public static void DeleteRecursive(File fileOrDirectory) {

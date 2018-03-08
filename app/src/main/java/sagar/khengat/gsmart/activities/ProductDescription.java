@@ -1,6 +1,9 @@
 package sagar.khengat.gsmart.activities;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -26,6 +30,7 @@ public class ProductDescription extends AppCompatActivity {
     public TextView textSellingPrice;
     public TextView textBrand;
     Product product;
+    Gson gson;
     final Activity activity = this;
 
     @Override
@@ -39,8 +44,11 @@ public class ProductDescription extends AppCompatActivity {
         textSellingPrice= (TextView) findViewById(R.id.tv_selling_price);
         textViewSize = (TextView) findViewById(R.id.tv_product_size);
         textBrand = (TextView) findViewById(R.id.product_brand);
-
-
+        product = new Product();
+        gson = new Gson();
+        final SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String strArea = sharedPreferences.getString("product", "");
+        product = gson.fromJson(strArea,Product.class);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -59,7 +67,10 @@ public class ProductDescription extends AppCompatActivity {
         textBrand.setText(product.getProductSubCategory().getSubCategoryName());
 
 
-        Picasso.with(activity).load(new File(Config.PATH+product.getStore().getStoreName()+"/"+product.getProductName()))
+        Picasso.with(activity).load(new File(  Environment.getExternalStorageDirectory().getPath()
+                + File.separator
+                +"GSmart"+  File.separator
+                + product.getStore().getStoreName()+File.separator+product.getProductName()+".jpg"))
                 .placeholder(R.drawable.product)
                 .fit()
                 .into(imageView);

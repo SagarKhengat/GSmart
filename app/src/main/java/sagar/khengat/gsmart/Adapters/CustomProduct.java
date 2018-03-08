@@ -1,6 +1,7 @@
 package sagar.khengat.gsmart.Adapters;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,7 +98,10 @@ public class CustomProduct extends RecyclerView.Adapter<CustomProduct.ViewHolder
         {
             holder.tvOff.setVisibility(View.INVISIBLE);
         }
-        Picasso.with(context).load(new File(Config.PATH+product.getStore().getStoreName()+"/"+product.getProductName()))
+        Picasso.with(context).load(new File(  Environment.getExternalStorageDirectory().getPath()
+                + File.separator
+                +"GSmart"+  File.separator
+                + product.getStore().getStoreName()+File.separator+product.getProductName()+".jpg"))
                 .placeholder(R.drawable.product)
                 .fit()
                 .into(holder.imageView);

@@ -1001,43 +1001,43 @@ public class DatabaseHandler {
 	}
 
 
-	public Cart fnGetCartFromCartHistory(History cart)
-	{
-
-
-
-		List <Cart> mListAllStores = fnGetAllCart();
-
-		try {
-//			QueryBuilder < Store, Integer > qb = storeDao.queryBuilder();
-//			Where<Store, Integer> where = qb.where();
-//
-//			where.like( "areaId", area.getAreaId() );//.or().like("customerPrintAs", "%"+nameToSearch+"%");
+//	public Cart fnGetCartFromCartHistory(History cart)
+//	{
 //
 //
 //
-//			// It filters only data present in DB fetched at the time of sync.
-//			PreparedQuery < Store> pq = where.prepare();
-//			mListStores = storeDao.query( pq );
-
-
-			for (Cart product : mListAllStores)
-			{
-				if(product.getProductId().equals(cart.getProductId()))
-				{
-					return product;
-				}
-			}
-
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-
-
-		return null;
-	}
+//		List <Cart> mListAllStores = fnGetAllCart();
+//
+//		try {
+////			QueryBuilder < Store, Integer > qb = storeDao.queryBuilder();
+////			Where<Store, Integer> where = qb.where();
+////
+////			where.like( "areaId", area.getAreaId() );//.or().like("customerPrintAs", "%"+nameToSearch+"%");
+////
+////
+////
+////			// It filters only data present in DB fetched at the time of sync.
+////			PreparedQuery < Store> pq = where.prepare();
+////			mListStores = storeDao.query( pq );
+//
+//
+//			for (Cart product : mListAllStores)
+//			{
+//				if(product.getProductId().equals(cart.getProductId()))
+//				{
+//					return product;
+//				}
+//			}
+//
+//
+//		} catch (Exception e) {
+//
+//			e.printStackTrace();
+//		}
+//
+//
+//		return null;
+//	}
 
 
 	public void updateCustomerPassword(String Email, String Password)
@@ -1215,6 +1215,41 @@ public class DatabaseHandler {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public List<Product> fnGetAllProductForCustomer(Store store,Area area,Category category, SubCategory subCategory)
+	{
+		List <Product> mListStores = new ArrayList<>();
+		List <Product> mListAllStores = fnGetAllProduct();
+
+		try {
+//			QueryBuilder < Store, Integer > qb = storeDao.queryBuilder();
+//			Where<Store, Integer> where = qb.where();
+//
+//			where.like( "areaId", area.getAreaId() );//.or().like("customerPrintAs", "%"+nameToSearch+"%");
+//
+//
+//
+//			// It filters only data present in DB fetched at the time of sync.
+//			PreparedQuery < Store> pq = where.prepare();
+//			mListStores = storeDao.query( pq );
+
+
+			for (Product product : mListAllStores)
+			{
+				if(product.getStore().getStoreId()==store.getStoreId() && product.getProductArea().getAreaId()==area.getAreaId()
+						 && product.getProductCategory().getCategoryId()==category.getCategoryId()
+						&&product.getProductSubCategory().getSubCategoryId()==subCategory.getSubCategoryId())
+				{
+					mListStores.add(product);
+				}
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return mListStores;
 	}
 
 }

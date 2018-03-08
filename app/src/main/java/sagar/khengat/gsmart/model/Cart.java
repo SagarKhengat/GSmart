@@ -33,9 +33,9 @@ public class Cart implements Parcelable {
     private String productUnit;
 
 
-    @DatabaseField(canBeNull = true,id = true)
+    @DatabaseField(canBeNull = true,generatedId = true)
 
-    private String productId;
+    private int productId;
 
 
     @DatabaseField(canBeNull = true)
@@ -61,6 +61,17 @@ public class Cart implements Parcelable {
 
     private double productTotalPrice;
 
+    @DatabaseField(canBeNull = true)
+
+    private String productCartId;
+
+    public String getProductCartId() {
+        return productCartId;
+    }
+
+    public void setProductCartId(String productCartId) {
+        this.productCartId = productCartId;
+    }
 
     public Area getProductArea() {
         return productArea;
@@ -149,11 +160,11 @@ public class Cart implements Parcelable {
         this.store = store;
     }
 
-    public String getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
@@ -173,9 +184,10 @@ public class Cart implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(productId);
+        dest.writeInt(productId);
         dest.writeInt(productQuantity);
         dest.writeString(productSize);
+        dest.writeString(productCartId);
         dest.writeDouble(productOriginalPrice);
         dest.writeDouble(productGstPrice);
         dest.writeDouble(productTotalPrice);
@@ -199,8 +211,9 @@ public class Cart implements Parcelable {
         }
     };
     public Cart(Parcel in) {
-        productId = in.readString();
+        productId = in.readInt();
         productName = in.readString();
+        productCartId = in.readString();
         store = (Store) in.readValue(Product.class.getClassLoader());
 
         productCategory = (Category) in.readValue(Product.class.getClassLoader());
@@ -225,6 +238,7 @@ public class Cart implements Parcelable {
                 ", store=" + store +
                 ", productCategory='" + productCategory + '\'' +
                 ", productUnit='" + productUnit + '\'' +
+                ", productCartId='" + productCartId + '\'' +
                 ", productId=" + productId +
                 ", productArea=" + productArea +
                 ", productSize='" + productSize + '\'' +

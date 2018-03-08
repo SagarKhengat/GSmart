@@ -59,6 +59,7 @@ public class StoreListingFragment extends Fragment {
     private SpinnerStoreAdapter storeAdapter;
        static String storeName;
     Gson gson;
+    SharedPreferences sharedPreferences;
     String who;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class StoreListingFragment extends Fragment {
         mDatabaeHelper = new DatabaseHandler(getActivity());
 
         gson = new Gson();
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         who = sharedPreferences.getString(Config.WHO, "");
 
 
@@ -117,16 +118,15 @@ public class StoreListingFragment extends Fragment {
             public void onClick(View v) {
                 if(mDatabaeHelper.fnGetAllArea().size()!=0 && mDatabaeHelper.fnGetAllStore().size()!=0) {
                     Intent accountsIntent = new Intent(getActivity(), MainActivity.class);
-                    accountsIntent.putExtra("store", store);
-                    accountsIntent.putExtra("area",area);
-                    accountsIntent.putExtra("category",category);
-                    accountsIntent.putExtra("subCategory",subCategory);
-//                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-//                    //Creating editor to store values to shared preferences
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    String saveStore = gson.toJson(store);
-//                    //Adding values to editor
-//                    editor.putString(Config.STORE_SHARED_PREF, saveStore).apply();
+                   ;
+                    //Creating editor to store values to shared preferences
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    String saveStore = gson.toJson(store);
+                    String saveArea = gson.toJson(area);
+                    //Adding values to editor
+                    editor.putString("store", saveStore);
+                    editor.putString("area", saveArea);
+                    editor.apply();
                     startActivity(accountsIntent);
 
                 }

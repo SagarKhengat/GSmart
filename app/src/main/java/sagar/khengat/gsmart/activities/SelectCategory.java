@@ -59,7 +59,7 @@ public class SelectCategory extends AppCompatActivity {
         mDatabaeHelper = new DatabaseHandler(activity);
 
         gson = new Gson();
-        SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+       final SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         who = sharedPreferences.getString(Config.WHO, "");
 
         mTextStore = (TextView) findViewById(R.id.txtStore);
@@ -114,8 +114,12 @@ public class SelectCategory extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, StoreListing.class);
-                intent.putExtra("category", category);
-                intent.putExtra("subCategory",subCategory);
+                String cat = gson.toJson(category);
+                String sub = gson.toJson(subCategory);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("category",cat);
+                editor.putString("subcategory",sub);
+                editor.apply();
                 startActivity(intent);
             }
         });

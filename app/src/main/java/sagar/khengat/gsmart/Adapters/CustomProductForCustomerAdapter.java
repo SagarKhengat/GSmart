@@ -1,6 +1,7 @@
 package sagar.khengat.gsmart.Adapters;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,16 +70,15 @@ public class CustomProductForCustomerAdapter extends RecyclerView.Adapter<Custom
 
         holder.textViewName.setText(product.getProductName());
         holder.tvSize.setText(product.getProductSize());
-        holder.tvUnit.setText(" "+product.getProductUnit());
+
         holder.tvUnitsell.setText("/ "+product.getProductUnit());
         holder.tvUnitact.setText("/ "+product.getProductUnit());
 
         holder.textActualPrice.setText(Double.toString(product.getProductOriginalPrice()));
         holder.textSellingPrice.setText(Double.toString(product.getProductGstPrice()));
-        String stringdouble= Integer.toString(product.getProductQuantity());
-        String stringPrice= Double.toString(product.getProductTotalPrice());
-        holder.tvTotalPrice.setText(stringPrice);
-        holder.tvQuantity.setText(stringdouble);
+
+        holder.tvTotalPrice.setText(product.getProductSubCategory().getSubCategoryName());
+        holder.tvQuantity.setText(product.getProductCategory().getCategoryName());
 
 
         double a = new Double(product.getProductOriginalPrice());
@@ -97,11 +97,13 @@ public class CustomProductForCustomerAdapter extends RecyclerView.Adapter<Custom
         {
             holder.tvOff.setVisibility(View.INVISIBLE);
         }
-        Picasso.with(context).load(new File(Config.PATH+product.getStore().getStoreName()+"/"+product.getProductName()))
+        Picasso.with(context).load(new File(  Environment.getExternalStorageDirectory().getPath()
+                + File.separator
+                +"GSmart"+  File.separator
+                + product.getStore().getStoreName()+File.separator+product.getProductName()+".jpg"))
                 .placeholder(R.drawable.product)
                 .fit()
                 .into(holder.imageView);
-
 
     }
 
@@ -123,11 +125,11 @@ public class CustomProductForCustomerAdapter extends RecyclerView.Adapter<Custom
     class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView imageView;
         public TextView textViewName;
-        public TextView textViewBrand;
+
         public TextView textActualPrice;
         public TextView textSellingPrice;
         public TextView tvQuantity;
-        public TextView tvUnit;
+
         public TextView tvUnitsell;
         public TextView tvUnitact;
         public TextView tvTotalPrice;
@@ -139,14 +141,14 @@ public class CustomProductForCustomerAdapter extends RecyclerView.Adapter<Custom
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.product_image);
             textViewName = (TextView) itemView.findViewById(R.id.product_name);
-            textViewBrand= (TextView) itemView.findViewById(R.id.product_brand);
+
             textActualPrice= (TextView) itemView.findViewById(R.id.actual_price);
             textSellingPrice= (TextView) itemView.findViewById(R.id.selling_price);
-            tvQuantity = (TextView) itemView.findViewById(R.id.quantity);
-            tvUnit = (TextView) itemView.findViewById(R.id.unit);
+            tvQuantity = (TextView) itemView.findViewById(R.id.product_category);
+
             tvUnitsell = (TextView) itemView.findViewById(R.id.unitsell);
             tvUnitact = (TextView) itemView.findViewById(R.id.unitact);
-            tvTotalPrice = (TextView)itemView.findViewById(R.id.total_price);
+            tvTotalPrice = (TextView)itemView.findViewById(R.id.product_subcategory);
             tvOff = (TextView)itemView.findViewById(R.id.off);
             tvSize = (TextView)itemView.findViewById(R.id.size);
             add = (Button) itemView.findViewById(R.id.add);

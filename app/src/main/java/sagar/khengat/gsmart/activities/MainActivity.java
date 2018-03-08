@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,10 +40,13 @@ import sagar.khengat.gsmart.LoginActivity;
 import sagar.khengat.gsmart.PreLoginActivity;
 import sagar.khengat.gsmart.R;
 import sagar.khengat.gsmart.activities.generator.GenerateActivity;
+import sagar.khengat.gsmart.model.Area;
 import sagar.khengat.gsmart.model.Cart;
+import sagar.khengat.gsmart.model.Category;
 import sagar.khengat.gsmart.model.Product;
 import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.model.Store;
+import sagar.khengat.gsmart.model.SubCategory;
 import sagar.khengat.gsmart.util.BadgeView;
 import sagar.khengat.gsmart.util.BottomNavigationViewHelper;
 import sagar.khengat.gsmart.util.DatabaseHandler;
@@ -67,8 +71,11 @@ public class MainActivity extends AppCompatActivity {
     Store storeBarcode;
     String who;
 
-
-
+    private Button placeOrder;
+    private TextView totalAmount;
+    private TextView totalOffAmount;
+    private ArrayList<Double> alTotalAmount;
+    private ArrayList<Double> alTotalOffAmount;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private List<Product> productList;
@@ -77,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
     Gson gson;
     Retailer retailer;
     Store store;
+    Area area;
+    Category category;
+    SubCategory subCategory;
 
 
     /**
@@ -101,16 +111,32 @@ public class MainActivity extends AppCompatActivity {
         mDatabaseHandler = new DatabaseHandler(this);
         cart = new Cart();
         gson = new Gson();
-
+        store = new Store();
+        area = new Area();
+        category = new Category();
+        subCategory = new SubCategory();
         recyclerView = (RecyclerView) findViewById(R.id.product_recycler);
         layoutManager = new LinearLayoutManager(activity);
+        totalAmount = (TextView) findViewById(R.id.tv_total_amount);
+        totalOffAmount = (TextView) findViewById(R.id.tv_off_amount);
+        placeOrder = (Button) findViewById(R.id.btn_place_order);
         recyclerView.setLayoutManager(layoutManager);
         productList = new ArrayList<>();
-
-
+        alTotalAmount = new ArrayList<>();
+        alTotalOffAmount = new ArrayList<>();
+       final SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String strArea = sharedPreferences.getString("area", "");
+        String strStore = sharedPreferences.getString("store", "");
+        String strCat = sharedPreferences.getString("category", "");
+        String strSb = sharedPreferences.getString("subcategory", "");
+        area = gson.fromJson(strArea,Area.class);
+        store = gson.fromJson(strStore,Store.class);
+        category = gson.fromJson(strCat,Category.class);
+        subCategory = gson.fromJson(strSb,SubCategory.class);
+        productList = mDatabaseHandler.fnGetAllProductForCustomer(store,area,category,subCategory);
 
         //Fetching the boolean value form sharedpreferences
-        SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
         String sharedPreferencesString = sharedPreferences.getString(Config.STORE_SHARED_PREF, "");
         who = sharedPreferences.getString(Config.WHO, "");
 
@@ -128,9 +154,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void imageViewOnClick(View v, int position) {
                 Product product1 = productList.get(position);
-
+                String p = gson.toJson(product1);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("product",p);
+                editor.apply();
 
                 Intent intent = new Intent(activity,ProductDescription.class);
+
                 startActivity(intent);
             }
         });
@@ -151,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         MenuItem itemCart = menu.findItem(R.id.cart);
 
          icon = (LayerDrawable) itemCart.getIcon();
-       int i =  mDatabaseHandler.fnGetCartCount(storeBarcode);
+       int i =  mDatabaseHandler.fnGetCartCount(store);
         setBadgeCount(activity, icon, String.valueOf(i));
         return true;
     }
@@ -267,16 +297,26 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                double multiQ = value * product1.getProductTotalPrice();
-
+                double multiQ = value * product1.getProductGstPrice();
+                double off = (product1.getProductOriginalPrice()-product1.getProductGstPrice())*value;
                 product1.setProductQuantity(value);
+                product1.setProductTotalPrice(multiQ);
 
-
-
-
-
-
-                cart.setProductId(product1.getProductId());
+                alTotalAmount.add(multiQ);
+                alTotalOffAmount.add(off);
+                double sum = 0;
+                for (int i = 0; i < alTotalAmount.size(); i++) {
+                    sum = sum + alTotalAmount.get(i);
+                }
+                String stringPrice = Double.toString(sum);
+                totalAmount.setText(stringPrice);
+                double sumoff = 0;
+                for (int i = 0; i < alTotalOffAmount.size(); i++) {
+                    sumoff = sumoff + alTotalOffAmount.get(i);
+                }
+                String stringPriceoff = Double.toString(sumoff);
+                totalOffAmount.setText(stringPriceoff);
+                cart.setProductCartId(product1.getProductId());
                 cart.setProductSize(product1.getProductSize());
                 cart.setStore(product1.getStore());
                 cart.setProductUnit(product1.getProductUnit());
@@ -291,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mDatabaseHandler.addToCart(cart);
 
-                int i =  mDatabaseHandler.fnGetCartCount(storeBarcode);
+                int i =  mDatabaseHandler.fnGetCartCount(store);
                 setBadgeCount(activity, icon, String.valueOf(i));
 
 
