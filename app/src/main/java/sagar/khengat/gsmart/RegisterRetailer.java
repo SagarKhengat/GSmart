@@ -179,10 +179,7 @@ public class RegisterRetailer extends AppCompatActivity  implements View.OnClick
 
         if (!databaseHelper.checkRetailerWithNumber(textInputEditTextName.getText().toString().trim(),textInputEditTextContact.getText().toString().trim())) {
             if(!databaseHelper.checkStore(textInputEditTextShopName.getText().toString().trim())) {
-                String storeName = textInputEditTextShopName.getText().toString();
-                store.setStoreName(storeName);
-                store.setArea(area);
-                databaseHelper.addStore(store);
+
                 retailer.setName(textInputEditTextName.getText().toString().trim());
                 retailer.setMobno(textInputEditTextContact.getText().toString().trim());
                 retailer.setPassword(textInputEditTextPassword.getText().toString().trim());
@@ -190,12 +187,19 @@ public class RegisterRetailer extends AppCompatActivity  implements View.OnClick
                 retailer.setStoreAddress(textInputEditTextShopAddress.getText().toString().trim());
                 retailer.setPassword(textInputEditTextPassword.getText().toString().trim());
                 retailer.setArea(area);
-                databaseHelper.addRetailer(retailer);
+              boolean b =  databaseHelper.addRetailer(retailer);
+                if(b)
+                {
+                    String storeName = textInputEditTextShopName.getText().toString();
+                    store.setStoreName(storeName);
+                    store.setArea(area);
+                    databaseHelper.addStore(store);
+                    // Snack Bar to show success message that record saved successfully
+                    emptyInputEditText();
+                    startActivity(new Intent(RegisterRetailer.this, LoginActivity.class));
+                    finish();
+                }
 
-                // Snack Bar to show success message that record saved successfully
-                emptyInputEditText();
-                startActivity(new Intent(RegisterRetailer.this, LoginActivity.class));
-                finish();
 
             }
             else

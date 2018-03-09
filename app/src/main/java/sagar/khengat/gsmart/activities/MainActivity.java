@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
@@ -23,6 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +46,7 @@ import sagar.khengat.gsmart.activities.generator.GenerateActivity;
 import sagar.khengat.gsmart.model.Area;
 import sagar.khengat.gsmart.model.Cart;
 import sagar.khengat.gsmart.model.Category;
+import sagar.khengat.gsmart.model.Customer;
 import sagar.khengat.gsmart.model.Product;
 import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.model.Store;
@@ -87,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     Area area;
     Category category;
     SubCategory subCategory;
+    Customer customer;
 
 
     /**
@@ -114,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         store = new Store();
         area = new Area();
         category = new Category();
+        customer = new Customer();
         subCategory = new SubCategory();
         recyclerView = (RecyclerView) findViewById(R.id.product_recycler);
         layoutManager = new LinearLayoutManager(activity);
@@ -129,12 +135,41 @@ public class MainActivity extends AppCompatActivity {
         String strStore = sharedPreferences.getString("store", "");
         String strCat = sharedPreferences.getString("category", "");
         String strSb = sharedPreferences.getString("subcategory", "");
+        String json = sharedPreferences.getString(Config.USER, "");
         area = gson.fromJson(strArea,Area.class);
         store = gson.fromJson(strStore,Store.class);
         category = gson.fromJson(strCat,Category.class);
         subCategory = gson.fromJson(strSb,SubCategory.class);
+        customer = gson.fromJson(json,Customer.class);
         productList = mDatabaseHandler.fnGetAllProductForCustomer(store,area,category,subCategory);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
+
+        if (productList.isEmpty()) {
+            //LinearLayOut Setup
+            LinearLayout linearLayout= new LinearLayout(this);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT));
+
+//ImageView Setup
+            ImageView imageView = new ImageView(this);
+
+//setting image resource
+            imageView.setImageResource(R.drawable.no_products);
+
+//setting image position
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+//adding view to layout
+            linearLayout.addView(imageView);
+//make visible to program
+            setContentView(linearLayout);
+
+        }
         //Fetching the boolean value form sharedpreferences
 
         String sharedPreferencesString = sharedPreferences.getString(Config.STORE_SHARED_PREF, "");
@@ -181,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         MenuItem itemCart = menu.findItem(R.id.cart);
 
          icon = (LayerDrawable) itemCart.getIcon();
-       int i =  mDatabaseHandler.fnGetCartCount(store);
+       int i =  mDatabaseHandler.fnGetCartCount(customer);
         setBadgeCount(activity, icon, String.valueOf(i));
         return true;
     }
@@ -202,6 +237,9 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
 
+                return true;
+            case android.R.id.home:
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -235,7 +273,8 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString(Config.WHO, "");
 
                         //putting blank value to usertoken
-
+                        editor.putString(Config.USER, "");
+                        editor.putString(Config.NAME,"");
 
                         //Saving the sharedpreferences
                         editor.commit();
@@ -324,14 +363,16 @@ public class MainActivity extends AppCompatActivity {
                 cart.setProductSubCategory(product1.getProductSubCategory());
                 cart.setProductName(product1.getProductName());
                 cart.setProductArea(product1.getProductArea());
+                cart.setProductOriginalPrice(product1.getProductOriginalPrice());
+                cart.setProductGstPrice(product1.getProductGstPrice());
                 cart.setProductQuantity(product1.getProductQuantity());
                 cart.setProductTotalPrice(product1.getProductTotalPrice());
-
+                cart.setCustomer(customer);
 
 
                 mDatabaseHandler.addToCart(cart);
 
-                int i =  mDatabaseHandler.fnGetCartCount(store);
+                int i =  mDatabaseHandler.fnGetCartCount(customer);
                 setBadgeCount(activity, icon, String.valueOf(i));
 
 

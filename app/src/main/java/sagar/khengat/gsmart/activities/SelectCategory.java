@@ -2,20 +2,28 @@ package sagar.khengat.gsmart.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.LayerDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sagar.khengat.gsmart.Adapters.SpinnerAreaAdapter;
@@ -23,10 +31,12 @@ import sagar.khengat.gsmart.Adapters.SpinnerCategoryAdapter;
 import sagar.khengat.gsmart.Adapters.SpinnerStoreAdapter;
 import sagar.khengat.gsmart.Adapters.SpinnerSubCategoryAdapter;
 import sagar.khengat.gsmart.Constants.Config;
+import sagar.khengat.gsmart.PreLoginActivity;
 import sagar.khengat.gsmart.R;
 import sagar.khengat.gsmart.StoreListing;
 import sagar.khengat.gsmart.model.Area;
 import sagar.khengat.gsmart.model.Category;
+import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.model.Store;
 import sagar.khengat.gsmart.model.SubCategory;
 import sagar.khengat.gsmart.util.DatabaseHandler;
@@ -52,6 +62,7 @@ public class SelectCategory extends AppCompatActivity {
     SubCategory subCategory;
     Gson gson;
     String who;
+    List<Retailer> retailers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,10 +80,34 @@ public class SelectCategory extends AppCompatActivity {
         spinnerSubCategory = (Spinner) findViewById(R.id.spinnerStore);
 
         fabGo = (FloatingActionButton) findViewById(R.id.fabGo);
+        retailers = new ArrayList<>();
+        retailers = mDatabaeHelper.fnGetAllRetailer();
 
 
+        if (retailers.isEmpty()) {
+            //LinearLayOut Setup
+            LinearLayout linearLayout= new LinearLayout(this);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
 
+            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT));
 
+//ImageView Setup
+            ImageView imageView = new ImageView(this);
+
+//setting image resource
+            imageView.setImageResource(R.drawable.no_retailer);
+
+//setting image position
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+//adding view to layout
+            linearLayout.addView(imageView);
+//make visible to program
+            setContentView(linearLayout);
+
+        }
 
 
         loadSpinnerCategory();
@@ -167,5 +202,75 @@ public class SelectCategory extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.store_menu, menu);
 
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+
+            case R.id.settings:
+                startActivity(new Intent(SelectCategory.this, ChangePassword.class));
+                return true;
+            case R.id.logout:
+                logout();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private void logout() {
+        //Creating an alert dialog to confirm logout
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(R.string.logout_title_msg);
+        alertDialogBuilder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        //Getting out sharedpreferences
+                        SharedPreferences preferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                        //Getting editor
+                        SharedPreferences.Editor editor = preferences.edit();
+
+                        //Puting the value false for loggedin
+                        editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, false);
+
+                        //Putting blank value to email
+                        editor.putString(Config.WHO, "");
+                        editor.putString(Config.USER, "");
+
+                        //putting blank value to usertoken
+                        editor.putString(Config.NAME,"");
+
+                        //Saving the sharedpreferences
+                        editor.commit();
+
+                        //Starting login activity
+                        Intent intent = new Intent(SelectCategory.this, PreLoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+                });
+
+        //Showing the alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+    }
 }

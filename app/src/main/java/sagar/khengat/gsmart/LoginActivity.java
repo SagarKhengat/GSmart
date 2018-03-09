@@ -20,6 +20,7 @@ import sagar.khengat.gsmart.activities.ChangePassword;
 import sagar.khengat.gsmart.activities.MainActivity;
 import sagar.khengat.gsmart.activities.MainActivityForRetailer;
 import sagar.khengat.gsmart.activities.SelectCategory;
+import sagar.khengat.gsmart.model.Customer;
 import sagar.khengat.gsmart.model.Retailer;
 import sagar.khengat.gsmart.util.DatabaseHandler;
 import sagar.khengat.gsmart.util.InputValidation;
@@ -167,7 +168,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
                       //Creating editor to store values to shared preferences
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-
+            Customer customer = databaseHelper.getCustomer(textInputEditTextEmail.getText().toString().trim()
+                    , textInputEditTextPassword.getText().toString().trim());
+            String json = gson.toJson(customer);
+            editor.putString(Config.USER,json);
                         //Adding values to editor
                         editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, true);
 //                        editor.putString(Config.NAME, userFirstName);

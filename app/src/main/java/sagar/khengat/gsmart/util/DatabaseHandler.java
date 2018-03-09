@@ -411,11 +411,13 @@ public class DatabaseHandler {
 	}
 
 
-	public void addRetailer(Retailer user) {
+	public boolean addRetailer(Retailer user) {
+		boolean b = false;
 		try
 		{
 			retailerDao.create( user );
 			Toast.makeText(context, context.getString(R.string.success_message), Toast.LENGTH_LONG).show();
+			b = true;
 
 		} catch(OutOfMemoryError e) {
 			e.printStackTrace();
@@ -425,6 +427,7 @@ public class DatabaseHandler {
 
 			e.printStackTrace();
 		}
+		return  b;
 	}
 
 
@@ -753,7 +756,7 @@ public class DatabaseHandler {
 	}
 
 
-	public int fnGetCartCount(Store store)
+	public int fnGetCartCount(Customer store)
 	{
 		int i = 0;
 
@@ -776,7 +779,7 @@ public class DatabaseHandler {
 
 			for (Cart cart : mListAllStores)
 			{
-				if(cart.getStore().getStoreId()==store.getStoreId())
+				if(cart.getCustomer().getId()==store.getId())
 				{
 					mListStores.add(cart);
 				}
@@ -795,7 +798,7 @@ public class DatabaseHandler {
 	}
 
 
-	public List<Cart> fnGetAllCart(Store store)
+	public List<Cart> fnGetAllCart(Customer store)
 	{
 
 		List <Cart> mListStores = new ArrayList<>();
@@ -816,7 +819,7 @@ public class DatabaseHandler {
 
 			for (Cart cart : mListAllStores)
 			{
-				if(cart.getStore().getStoreId()==store.getStoreId())
+				if(cart.getCustomer().getId()==store.getId())
 				{
 					mListStores.add(cart);
 				}
@@ -853,7 +856,7 @@ public class DatabaseHandler {
 	}
 
 
-	public void fnDeleteAllCart(Store store)
+	public void fnDeleteAllCart(Customer store)
 	{
 
 		List <Cart> mListStores = new ArrayList<>();
@@ -874,7 +877,7 @@ public class DatabaseHandler {
 
 			for (Cart cart : mListAllStores)
 			{
-				if(cart.getStore().getStoreId()==store.getStoreId())
+				if(cart.getCustomer().getId()==store.getId())
 				{
 					cartDao.delete(cart);
 				}
@@ -1095,6 +1098,35 @@ public class DatabaseHandler {
 			QueryBuilder < Retailer, Integer > qb = retailerDao.queryBuilder();
 
 			for (Retailer user:
+					mListAllStores) {
+
+				if (user.getName().equals(retailerName) && user.getPassword().equals(password))
+				{
+					b = user;
+				}
+				else
+				{
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return b;
+	}
+
+
+	public Customer getCustomer(String retailerName, String password)
+	{
+		Customer b = null;
+		List <Customer> mListAllStores = fnGetAllCustomer();
+		try {
+			QueryBuilder < Customer, Integer > qb = customerDao.queryBuilder();
+
+			for (Customer user:
 					mListAllStores) {
 
 				if (user.getName().equals(retailerName) && user.getPassword().equals(password))

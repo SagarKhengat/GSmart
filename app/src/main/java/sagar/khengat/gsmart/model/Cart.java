@@ -65,6 +65,20 @@ public class Cart implements Parcelable {
 
     private String productCartId;
 
+
+    @DatabaseField(foreign=true, foreignAutoRefresh=true, canBeNull=true,
+            maxForeignAutoRefreshLevel=3)
+
+    private Customer customer;
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     public String getProductCartId() {
         return productCartId;
     }
@@ -194,6 +208,7 @@ public class Cart implements Parcelable {
         dest.writeString(productName);
 
         dest.writeValue(productCategory);
+        dest.writeValue(customer);
         dest.writeValue(productArea);
         dest.writeString(productUnit);
         dest.writeValue(productSubCategory);
@@ -219,6 +234,7 @@ public class Cart implements Parcelable {
         productCategory = (Category) in.readValue(Product.class.getClassLoader());
         productSubCategory = (SubCategory) in.readValue(Product.class.getClassLoader());
         productArea = (Area) in.readValue(Product.class.getClassLoader());
+        customer = (Customer) in.readValue(Product.class.getClassLoader());
         productQuantity = in.readInt();
         productSize = in.readString();
         productUnit = in.readString();
@@ -246,6 +262,7 @@ public class Cart implements Parcelable {
                 ", productGstPrice=" + productGstPrice +
                 ", productQuantity=" + productQuantity +
                 ", productTotalPrice=" + productTotalPrice +
+                ", customer=" + customer +
                 '}';
     }
 }

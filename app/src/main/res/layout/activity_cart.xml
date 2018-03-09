@@ -17,67 +17,119 @@
         android:layout_marginBottom="40dp">
 
     </android.support.v7.widget.RecyclerView>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="45dp"
+        android:background="#707070"
         android:layout_alignParentBottom="true"
-        android:background="#707070">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-        <TextView
+        <RelativeLayout
+            android:id="@+id/test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FFF"
-            android:textSize="15sp"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-light"
-            android:text="Total Amount: "
-            android:paddingLeft="05dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFF"
-            android:textSize="15sp"
-            android:layout_gravity="center"
-            android:text="Rs."
-            android:fontFamily="sans-serif-light"
-            android:paddingLeft="1dp"/>
-        <TextView
-            android:id="@+id/tv_total_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFF"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif-light"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:text="0"
-            android:paddingLeft="2dp"/>
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                android:id="@+id/ta1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF"
+                android:textSize="12sp"
+                android:layout_gravity="bottom"
+                android:fontFamily="sans-serif-light"
+                android:text="Total Amount You Save: "
+                android:paddingLeft="05dp"/>
+            <TextView
+                android:id="@+id/rs1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF"
+                android:textSize="12sp"
+                android:layout_gravity="bottom"
+                android:text="Rs."
+                android:fontFamily="sans-serif-light"
+                android:paddingLeft="1dp"
+                android:layout_toRightOf="@id/ta1"/>
+            <TextView
+                android:id="@+id/tv_off_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-light"
+                android:layout_gravity="bottom"
+                android:textStyle="bold"
+                android:text="0"
+                android:paddingLeft="2dp"
+                android:layout_toRightOf="@id/rs1"/>
+        </RelativeLayout>
 
+
+
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/test"
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                android:id="@+id/ta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF"
+                android:textSize="12sp"
+                android:layout_gravity="bottom"
+                android:fontFamily="sans-serif-light"
+                android:text="Total Amount You Pay: "
+                android:paddingLeft="05dp"/>
+            <TextView
+                android:id="@+id/rs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF"
+                android:textSize="12sp"
+                android:layout_gravity="bottom"
+                android:text="Rs."
+                android:fontFamily="sans-serif-light"
+                android:paddingLeft="1dp"
+                android:layout_toRightOf="@id/ta"/>
+            <TextView
+                android:id="@+id/tv_total_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-light"
+                android:layout_gravity="bottom"
+                android:textStyle="bold"
+                android:text="0"
+                android:paddingLeft="2dp"
+                android:layout_toRightOf="@id/rs"/>
+        </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
-
-
-
-
-
-
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp">
             <Button
                 android:id="@+id/btn_place_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:fontFamily="sans-serif-light"
                 android:background="@drawable/shape"
                 android:textColor="#fff"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="Send Order"
+                android:text="Submit Order"
                 android:textSize="11sp"/>
         </RelativeLayout>
 
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
