@@ -58,7 +58,7 @@ public class ChangePassword extends AppCompatActivity {
                     etxCurrentPassword.requestFocus();
                     return;
                 }
-                if(etxCurrentPassword.getText().toString().trim().length()==10)
+                if(etxCurrentPassword.getText().toString().trim().length()!=10)
                 {
                     etxCurrentPassword.setError("Invalid Mobile Number.");
                     etxCurrentPassword.requestFocus();

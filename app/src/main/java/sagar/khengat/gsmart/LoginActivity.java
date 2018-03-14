@@ -194,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(activity, "wrong password..please try again..", Toast.LENGTH_SHORT).show();
             }
             else {
-                Toast.makeText(activity, "No email found, please create account", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "No username found, please create account", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -244,7 +244,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(activity, "wrong password..please try again..", Toast.LENGTH_SHORT).show();
             }
             else {
-                Toast.makeText(activity, "No email found, please create account", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "No Username found, please create account", Toast.LENGTH_SHORT).show();
             }
         }
     }

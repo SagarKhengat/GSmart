@@ -16,7 +16,9 @@ import com.google.gson.Gson;
 
 import sagar.khengat.gsmart.Constants.Config;
 import sagar.khengat.gsmart.R;
+import sagar.khengat.gsmart.model.Category;
 import sagar.khengat.gsmart.model.Retailer;
+import sagar.khengat.gsmart.util.DatabaseHandler;
 
 /**
  * Created by Sagar Khengat on 04/03/2018.
@@ -31,6 +33,7 @@ public class FragmentRetailerMainActivity extends Fragment implements View.OnCli
     View view;
     public static FragmentManager manager;
     public static FragmentTransaction ft;
+    DatabaseHandler mDataBaseHandler;
     Gson gson;
     Retailer retailer;
     @Override
@@ -49,6 +52,7 @@ public class FragmentRetailerMainActivity extends Fragment implements View.OnCli
         appCompatButtonUpdateProduct = (AppCompatButton) view.findViewById(R.id.appCompatButtonUpdateProduct);
         textViewLinkWelcome = (AppCompatTextView)view.findViewById(R.id.textViewLinkWelcome);
         gson = new Gson();
+        mDataBaseHandler = new DatabaseHandler(getActivity());
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String json = sharedPreferences.getString(Config.USER, "");
         retailer = gson.fromJson(json,Retailer.class);
@@ -59,6 +63,13 @@ public class FragmentRetailerMainActivity extends Fragment implements View.OnCli
         appCompatButtonViewProduct.setOnClickListener(this);
         appCompatButtonDeleteProduct.setOnClickListener(this);
         appCompatButtonUpdateProduct.setOnClickListener(this);
+
+        Category category4 = new Category();
+        category4.setCategoryName("Select Category");
+        if(!mDataBaseHandler.checkCategory(category4)) {
+
+            mDataBaseHandler.addCategory(category4);
+        }
         return view;
     }
 

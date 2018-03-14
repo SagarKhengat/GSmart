@@ -57,7 +57,10 @@ public class MainActivityForRetailer extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.settings:
                 return true;
+            case R.id.updatepass:
+                startActivity(new Intent(MainActivityForRetailer.this, ChangePassword.class));
 
+                return true;
             case R.id.logout:
                 logout();
                 return true;

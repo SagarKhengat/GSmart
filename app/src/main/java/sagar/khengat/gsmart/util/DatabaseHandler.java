@@ -1048,7 +1048,7 @@ public class DatabaseHandler {
 		try
 		{
 			UpdateBuilder<Customer, Integer> updateBuilder = customerDao.updateBuilder();
-			updateBuilder.where().eq("email",Email);
+			updateBuilder.where().eq("name",Email);
 			updateBuilder.updateColumnValue("password",Password);
 			updateBuilder.update();
 			Toast.makeText( context, "Password changed Successfully...", Toast.LENGTH_LONG ).show();
@@ -1071,7 +1071,7 @@ public class DatabaseHandler {
 		try
 		{
 			UpdateBuilder<Retailer, Integer> updateBuilder = retailerDao.updateBuilder();
-			updateBuilder.where().eq("email",Email);
+			updateBuilder.where().eq("name",Email);
 			updateBuilder.updateColumnValue("password",Password);
 			updateBuilder.update();
 			Toast.makeText( context, "Password changed Successfully...", Toast.LENGTH_LONG ).show();

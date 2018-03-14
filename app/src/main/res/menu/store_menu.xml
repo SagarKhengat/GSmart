@@ -3,6 +3,8 @@
 
     <item android:id="@+id/settings"
         android:title="Settings"></item>
+    <item android:id="@+id/updatepass"
+        android:title="Update Password"></item>
     <item android:id="@+id/logout"
         android:title="@string/logout"></item>
 </menu>

@@ -183,12 +183,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
 //        c1.setSubCategoryId(0);
 //        c1.setSubCategoryName("Select Sub-Category");
 //        mDatabaseHandler.addSubCategory(c1);
-        Category category4 = new Category();
-        category4.setCategoryName("Select Category");
-        if(!mDatabaseHandler.checkCategory(category4)) {
 
-            mDatabaseHandler.addCategory(category4);
-        }
         Category category1 = new Category();
         category1.setCategoryName("Food");
         if(!mDatabaseHandler.checkCategory(category1)) {
