@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -63,6 +64,7 @@ public class SelectCategory extends AppCompatActivity {
     Gson gson;
     String who;
     List<Retailer> retailers;
+    String subCatName = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +121,13 @@ public class SelectCategory extends AppCompatActivity {
                 Category area = categoryAdapter.getItem(position);
                 category = area;
 
-                loadSpinnerSubCategory(area);
+                if(!category.getCategoryName().equals("Select Category")) {
+                    loadSpinnerSubCategory(area);
+                }else
+                {
+                    spinnerSubCategory.setAdapter(null);
+                    subCatName = "";
+                }
 
 
             }
@@ -135,7 +143,7 @@ public class SelectCategory extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SubCategory s = subCategoryAdapter.getItem(position);
                 subCategory = s;
-
+                subCatName = s.getSubCategoryName();
             }
 
             @Override
@@ -148,6 +156,11 @@ public class SelectCategory extends AppCompatActivity {
         fabGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(subCatName.equals(""))
+                {
+                    Toast.makeText(SelectCategory.this, "Select Category first", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent = new Intent(activity, StoreListing.class);
                 String cat = gson.toJson(category);
                 String sub = gson.toJson(subCategory);

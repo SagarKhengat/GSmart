@@ -81,6 +81,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:hint="Mobile No."
+                android:maxLength="10"
                 android:maxLines="1"
                 android:textColor="@android:color/background_dark" />
         </android.support.design.widget.TextInputLayout>

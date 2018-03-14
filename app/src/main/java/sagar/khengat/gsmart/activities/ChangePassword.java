@@ -47,14 +47,20 @@ public class ChangePassword extends AppCompatActivity {
             public void onClick(View view) {
                 if(etxCurrentEmail.getText().toString().trim().length()==0)
                 {
-                    etxCurrentEmail.setError("Email field can not be blank");
+                    etxCurrentEmail.setError("UserName field can not be blank");
                     etxCurrentEmail.requestFocus();
                     return;
                 }
 
                 if(etxCurrentPassword.getText().toString().trim().length()==0)
                 {
-                    etxCurrentPassword.setError("Password field can not be blank");
+                    etxCurrentPassword.setError("Mobile Number field can not be blank");
+                    etxCurrentPassword.requestFocus();
+                    return;
+                }
+                if(etxCurrentPassword.getText().toString().trim().length()==10)
+                {
+                    etxCurrentPassword.setError("Invalid Mobile Number.");
                     etxCurrentPassword.requestFocus();
                     return;
                 }

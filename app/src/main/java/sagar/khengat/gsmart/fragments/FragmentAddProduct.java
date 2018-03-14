@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -100,6 +102,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
     Bitmap bitmap = null;
     Category category;
     SubCategory subCategory;
+    String subCatName = "";
     Area area;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -180,7 +183,12 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
 //        c1.setSubCategoryId(0);
 //        c1.setSubCategoryName("Select Sub-Category");
 //        mDatabaseHandler.addSubCategory(c1);
+        Category category4 = new Category();
+        category4.setCategoryName("Select Category");
+        if(!mDatabaseHandler.checkCategory(category4)) {
 
+            mDatabaseHandler.addCategory(category4);
+        }
         Category category1 = new Category();
         category1.setCategoryName("Food");
         if(!mDatabaseHandler.checkCategory(category1)) {
@@ -272,8 +280,13 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Category area = categoryAdapter.getItem(position);
                     category = area;
-
-                    loadSpinnerSubCategory(area);
+                    if(!category.getCategoryName().equals("Select Category")) {
+                        loadSpinnerSubCategory(area);
+                    }else
+                    {
+                        spinnerSubCategory.setAdapter(null);
+                        subCatName = "";
+                    }
 
 
             }
@@ -289,6 +302,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                SubCategory s = subCategoryAdapter.getItem(position);
                 subCategory = s;
+                subCatName = s.getSubCategoryName();
 
             }
 
@@ -326,7 +340,6 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
         // Spinner Drop down elements
         List<SubCategory> allAreas = mDatabaseHandler.fnGetSubCategoriesInCategory(area);
 
-        if (area.getCategoryId()!=0) {
 
 
             // Creating adapter for spinner
@@ -339,7 +352,7 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
 
             // attaching data adapter to spinner
             spinnerSubCategory.setAdapter(subCategoryAdapter);
-        }
+
     }
 
     @Override
@@ -469,6 +482,11 @@ public class FragmentAddProduct extends Fragment implements View.OnClickListener
 
                         product.setProductId(textInputEditTextProductId.getText().toString().trim());
                     }
+                }
+                if(subCatName.equals(""))
+                {
+                    Toast.makeText(getActivity(), "Select Category first", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                         product.setStore(store);
                         product.setProductCategory(category);
@@ -612,6 +630,18 @@ public void saveImageToSDCard(Bitmap bitmap,String name,String areaName) {
 
         fileOrDirectory.delete();
 
+    }
+    private void setSpinnerError(Spinner spinner, String error){
+        View selectedView = spinner.getSelectedView();
+        if (selectedView != null && selectedView instanceof TextView) {
+            spinner.requestFocus();
+            TextView selectedTextView = (TextView) selectedView;
+            selectedTextView.setError("error"); // any name of the error will do
+            selectedTextView.setTextColor(Color.RED); //text color in which you want your error message to be displayed
+            selectedTextView.setText(error); // actual error message
+            spinner.performClick(); // to open the spinner list if error is found.
+
+        }
     }
 
         }
